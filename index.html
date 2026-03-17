@@ -3,571 +3,1125 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nucleus Design System</title>
+  <title>Nucleus – Design System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="tokens.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./tokens.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    html { height: 100%; }
     body {
       font-family: var(--sds-typography-body-font-family);
       background: #f7f7f7;
       color: var(--sds-color-text-default-default);
-      min-height: 100vh;
-    }
-
-    /* ── Layout ── */
-    .layout {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      min-height: 100vh;
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      background: var(--sds-color-background-brand-default);
-      padding: 32px 20px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-    }
-
-    .sidebar__logo {
-      font-size: 18px;
-      font-weight: var(--sds-typography-body-font-weight-strong);
-      color: var(--sds-color-text-brand-on-brand);
-      margin-bottom: 32px;
-      display: block;
-      text-decoration: none;
-    }
-
-    .sidebar__section {
-      margin-bottom: 24px;
-    }
-
-    .sidebar__label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(245,245,245,0.45);
-      margin-bottom: 8px;
-      padding: 0 8px;
-    }
-
-    .sidebar__link {
-      display: block;
-      padding: 6px 8px;
-      border-radius: var(--sds-size-radius-100);
-      font-size: 14px;
-      color: rgba(245,245,245,0.75);
-      text-decoration: none;
-      transition: background 0.1s, color 0.1s;
-    }
-
-    .sidebar__link:hover {
-      background: rgba(255,255,255,0.1);
-      color: var(--sds-color-text-brand-on-brand);
-    }
-
-    .sidebar__link.available {
-      color: var(--sds-color-text-brand-on-brand);
-    }
-
-    /* ── Main ── */
-    .main {
-      padding: 56px 64px;
-      max-width: 1100px;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      margin-bottom: 56px;
-    }
-
-    .hero__eyebrow {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--sds-color-text-default-secondary);
-      margin-bottom: 12px;
-    }
-
-    .hero__title {
-      font-size: 40px;
-      font-weight: var(--sds-typography-heading-font-weight);
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      color: var(--sds-color-text-default-default);
-      margin-bottom: 16px;
-    }
-
-    .hero__subtitle {
-      font-size: var(--sds-typography-body-size-medium);
-      line-height: var(--sds-typography-body-line-height);
-      color: var(--sds-color-text-default-secondary);
-      max-width: 520px;
-    }
-
-    /* ── Token strip ── */
-    .token-strip {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 56px;
-      flex-wrap: wrap;
-    }
-
-    .token-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: var(--sds-size-radius-full);
-      border: 1px solid var(--sds-color-border-default-default);
-      font-size: 12px;
-      color: var(--sds-color-text-default-secondary);
-      background: var(--sds-color-background-default-default);
-    }
-
-    .token-chip__dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* ── Section ── */
-    .section { margin-bottom: 48px; }
-
-    .section__header {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--sds-color-border-default-default);
-    }
-
-    .section__title {
-      font-size: 18px;
-      font-weight: var(--sds-typography-body-font-weight-strong);
-      color: var(--sds-color-text-default-default);
-    }
-
-    .section__count {
-      font-size: 13px;
-      color: var(--sds-color-text-default-secondary);
-    }
-
-    /* ── Component grid ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    /* ── Component card ── */
-    .comp-card {
-      background: var(--sds-color-background-default-default);
-      border: 1px solid var(--sds-color-border-default-default);
-      border-radius: var(--sds-size-radius-200);
-      padding: 20px;
-      text-decoration: none;
+      min-height: 100%;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      transition: border-color 0.15s, box-shadow 0.15s;
     }
+    .layout { display: flex; flex: 1; min-height: 100vh; }
 
-    .comp-card:hover {
-      border-color: var(--sds-color-border-neutral-secondary);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--sds-color-background-default-default);
+      border-right: 1px solid var(--sds-color-border-default-default);
+      position: fixed; top: 0; left: 0; height: 100vh;
+      display: flex; flex-direction: column; overflow-y: auto; z-index: 100;
     }
-
-    .comp-card--available {
-      cursor: pointer;
+    .sidebar__logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      text-decoration: none; flex-shrink: 0;
     }
-
-    .comp-card--unavailable {
-      opacity: 0.5;
-      cursor: default;
-      pointer-events: none;
+    .sidebar__logo-mark {
+      width: 32px; height: 32px;
+      background: var(--sds-color-background-brand-default);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-
-    .comp-card__name {
-      font-size: 14px;
-      font-weight: var(--sds-typography-body-font-weight-strong);
-      color: var(--sds-color-text-default-default);
+    .sidebar__logo-mark svg { width: 18px; height: 18px; color: var(--sds-color-text-brand-on-brand); }
+    .sidebar__logo-name { font-size: 15px; font-weight: 700; color: var(--sds-color-text-default-default); letter-spacing: -0.01em; }
+    .sidebar__logo-version { font-size: 11px; color: var(--sds-color-text-default-tertiary); }
+    .sidebar__nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+    .sidebar__section { margin-bottom: 4px; }
+    .sidebar__section-label {
+      font-size: 11px; font-weight: 600; color: var(--sds-color-text-default-tertiary);
+      text-transform: uppercase; letter-spacing: 0.07em; padding: 8px 20px 4px;
     }
-
-    .comp-card__meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .sidebar__link {
+      display: flex; align-items: center; gap: 8px; padding: 7px 20px;
+      font-size: 14px; color: var(--sds-color-text-default-secondary);
+      text-decoration: none; transition: background 0.1s, color 0.1s; position: relative;
     }
-
-    .comp-card__arrow {
-      font-size: 14px;
-      color: var(--sds-color-text-default-secondary);
+    .sidebar__link:hover { background: var(--sds-color-background-default-secondary); color: var(--sds-color-text-default-default); }
+    .sidebar__link--active { color: var(--sds-color-text-neutral-default); font-weight: 600; background: var(--sds-color-background-default-secondary); }
+    .sidebar__link--active::before {
+      content: ''; position: absolute; left: 0; top: 4px; bottom: 4px;
+      width: 3px; background: var(--sds-color-background-brand-default); border-radius: 0 2px 2px 0;
     }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: var(--sds-size-radius-full);
+    .sidebar__link svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.6; }
+    .sidebar__link--active svg, .sidebar__link:hover svg { opacity: 1; }
+    .sidebar__badge {
+      margin-left: auto; background: var(--sds-color-background-neutral-tertiary);
+      color: var(--sds-color-text-neutral-default); font-size: 10px; font-weight: 600;
+      padding: 2px 6px; border-radius: 9999px;
     }
+    .sidebar__footer { padding: 16px 20px; border-top: 1px solid var(--sds-color-border-default-default); font-size: 12px; color: var(--sds-color-text-default-tertiary); flex-shrink: 0; }
 
-    .badge--ready {
-      background: var(--sds-color-background-positive-secondary);
-      color: var(--sds-color-text-positive-on-positive-secondary);
+    /* ── MAIN ── */
+    .main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--sds-color-background-default-default);
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      padding: 0 40px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      position: sticky; top: 0; z-index: 50;
     }
-
-    .badge--soon {
+    .topbar__search {
+      display: flex; align-items: center; gap: 8px;
       background: var(--sds-color-background-default-secondary);
-      color: var(--sds-color-text-default-secondary);
+      border: 1px solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 7px 12px; max-width: 320px; width: 100%;
     }
+    .topbar__search svg { width: 15px; height: 15px; color: var(--sds-color-text-default-secondary); flex-shrink: 0; }
+    .topbar__search input { border: none; background: transparent; outline: none; font-family: var(--sds-typography-body-font-family); font-size: 14px; color: var(--sds-color-text-default-default); width: 100%; }
+    .topbar__search input::placeholder { color: var(--sds-color-text-default-tertiary); }
+    .topbar__actions { display: flex; align-items: center; gap: 8px; }
+    .topbar__btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--sds-size-radius-200); border: 1px solid transparent;
+      font-family: var(--sds-typography-body-font-family); font-size: 13px; font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: background 0.15s;
+    }
+    .topbar__btn--ghost { background: transparent; border-color: var(--sds-color-border-default-default); color: var(--sds-color-text-default-secondary); }
+    .topbar__btn--ghost:hover { background: var(--sds-color-background-default-secondary); color: var(--sds-color-text-default-default); }
+    .topbar__btn--primary { background: var(--sds-color-background-brand-default); border-color: var(--sds-color-background-brand-default); color: var(--sds-color-text-brand-on-brand); }
+    .topbar__btn--primary:hover { background: var(--sds-color-background-brand-hover); }
+
+    /* ── CONTENT ── */
+    .content { padding: 48px 40px 64px; max-width: 1200px; width: 100%; }
+
+    /* ── HERO ── */
+    .hero { margin-bottom: 56px; }
+    .hero__badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+      background: var(--sds-color-background-neutral-tertiary); border: 1px solid var(--sds-color-border-default-default);
+      border-radius: 9999px; font-size: 12px; font-weight: 600; color: var(--sds-color-text-neutral-default); margin-bottom: 20px;
+    }
+    .hero__badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sds-color-background-positive-default); }
+    .hero__title { font-size: var(--sds-typography-scale-07); font-weight: 700; color: var(--sds-color-text-default-default); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
+    .hero__subtitle { font-size: var(--sds-typography-subheading-size-medium); color: var(--sds-color-text-default-secondary); line-height: 1.5; max-width: 600px; margin-bottom: 28px; }
+    .hero__actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .hero__btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px;
+      border-radius: var(--sds-size-radius-200); border: 1px solid transparent;
+      font-family: var(--sds-typography-body-font-family); font-size: var(--sds-typography-body-size-medium); font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: background 0.15s;
+    }
+    .hero__btn--primary { background: var(--sds-color-background-brand-default); border-color: var(--sds-color-background-brand-default); color: var(--sds-color-text-brand-on-brand); }
+    .hero__btn--primary:hover { background: var(--sds-color-background-brand-hover); }
+    .hero__btn--ghost { background: var(--sds-color-background-default-default); border-color: var(--sds-color-border-default-default); color: var(--sds-color-text-default-default); }
+    .hero__btn--ghost:hover { background: var(--sds-color-background-default-secondary); }
+
+    /* ── STATS ── */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px; }
+    .stat-card { background: var(--sds-color-background-default-default); border: 1px solid var(--sds-color-border-default-default); border-radius: var(--sds-size-radius-200); padding: 20px 24px; }
+    .stat-card__value { font-size: 32px; font-weight: 700; color: var(--sds-color-text-default-default); line-height: 1; letter-spacing: -0.02em; }
+    .stat-card__label { font-size: 13px; color: var(--sds-color-text-default-secondary); margin-top: 6px; }
+    .stat-card__delta { font-size: 12px; font-weight: 600; color: var(--sds-color-text-positive-on-positive-secondary); margin-top: 4px; }
+
+    /* ── SECTION HEADER ── */
+    .section-header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .section-title { font-size: var(--sds-typography-heading-size-base); font-weight: var(--sds-typography-heading-font-weight); color: var(--sds-color-text-default-default); letter-spacing: var(--sds-typography-heading-letter-spacing); }
+    .section-count { font-size: 13px; color: var(--sds-color-text-default-secondary); }
+
+    /* ── CATEGORY ── */
+    .category-group { margin-bottom: 44px; }
+    .category-label { font-size: 11px; font-weight: 700; color: var(--sds-color-text-default-tertiary); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--sds-color-border-default-default); }
+
+    /* ── COMPONENT GRID ── */
+    .component-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .component-card {
+      background: var(--sds-color-background-default-default);
+      border: 1px solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200); padding: 20px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
+      text-decoration: none; position: relative;
+    }
+    .component-card:hover { border-color: var(--sds-color-border-neutral-secondary); box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+    .component-card__preview {
+      height: 80px; border-radius: var(--sds-size-radius-100);
+      background: var(--sds-color-background-default-secondary);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .component-card__meta { display: flex; flex-direction: column; gap: 4px; }
+    .component-card__name { font-size: var(--sds-typography-body-size-small); font-weight: var(--sds-typography-body-font-weight-strong); color: var(--sds-color-text-default-default); }
+    .component-card__category { font-size: 12px; color: var(--sds-color-text-default-secondary); }
+    .component-card__footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .component-card__link { font-size: 12px; font-weight: 600; color: var(--sds-color-text-default-secondary); text-decoration: none; }
+    .component-card:hover .component-card__link { color: var(--sds-color-text-default-default); }
+    .component-card__status { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
+    .status--stable { background: var(--sds-color-background-positive-secondary); color: var(--sds-color-text-positive-on-positive-secondary); }
+    .status--planned { background: var(--sds-color-background-neutral-tertiary); color: var(--sds-color-text-neutral-tertiary); }
+
+    /* ── PREVIEW HELPERS ── */
+    .pb { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; border: 1px solid; cursor: default; display: inline-flex; align-items: center; }
+    .pb-p { background: #2c2c2c; border-color: #2c2c2c; color: #f5f5f5; }
+    .pb-n { background: #e3e3e3; border-color: #767676; color: #1e1e1e; }
+    .pav { width: 36px; height: 36px; border-radius: 50%; background: #2c2c2c; color: #f5f5f5; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+    .ptag { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; border: 1px solid; }
+    .pnotif { width: 85%; padding: 8px 10px; border-radius: 6px; border: 1px solid #d9d9d9; background: white; font-size: 10px; color: #757575; display: flex; align-items: center; gap: 6px; }
+    .pnotif svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ── TOKEN GRID ── */
+    .token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-bottom: 56px; }
+    .tc { display: flex; align-items: center; gap: 10px; background: var(--sds-color-background-default-default); border: 1px solid var(--sds-color-border-default-default); border-radius: var(--sds-size-radius-100); padding: 8px 12px; }
+    .tc__sw { width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.08); }
+    .tc__i { flex: 1; min-width: 0; }
+    .tc__n { font-size: 11px; font-weight: 600; color: var(--sds-color-text-default-default); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tc__v { font-size: 10px; color: var(--sds-color-text-default-secondary); font-family: 'Courier New', monospace; }
+
+    /* ── FOOTER ── */
+    .page-footer { margin-top: auto; padding: 32px 40px; border-top: 1px solid var(--sds-color-border-default-default); background: var(--sds-color-background-default-default); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .page-footer__copy { font-size: 13px; color: var(--sds-color-text-default-tertiary); }
+    .page-footer__links { display: flex; gap: 20px; }
+    .page-footer__link { font-size: 13px; color: var(--sds-color-text-default-secondary); text-decoration: none; }
+    .page-footer__link:hover { color: var(--sds-color-text-default-default); }
+
+    .divider { border: none; border-top: 1px solid var(--sds-color-border-default-default); margin: 48px 0; }
+    .pin { padding: 10px; }
   </style>
 </head>
 <body>
-  <div class="layout">
+<div class="layout">
 
-    <!-- Sidebar -->
-    <nav class="sidebar">
-      <a class="sidebar__logo" href="index.html">Nucleus</a>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" aria-label="Main navigation">
+    <a href="./index.html" class="sidebar__logo">
+      <div class="sidebar__logo-mark">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="10.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="1.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="10.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sidebar__logo-name">Nucleus</div>
+        <div class="sidebar__logo-version">v1.0.0</div>
+      </div>
+    </a>
 
+    <nav class="sidebar__nav">
       <div class="sidebar__section">
-        <div class="sidebar__label">Components</div>
-        <a class="sidebar__link available" href="components/accordion.html">Accordion</a>
-        <a class="sidebar__link available" href="components/accordion-item.html">Accordion Item</a>
-        <a class="sidebar__link available" href="components/avatar.html">Avatar</a>
-        <a class="sidebar__link available" href="components/button.html">Button</a>
-        <a class="sidebar__link available" href="components/card.html">Card</a>
-        <a class="sidebar__link available" href="components/input.html">Input</a>
-        <a class="sidebar__link available" href="components/notification.html">Notification</a>
-        <a class="sidebar__link available" href="components/tabs.html">Tabs</a>
-        <a class="sidebar__link available" href="components/tag.html">Tag</a>
+        <p class="sidebar__section-label">Overview</p>
+        <a href="./index.html" class="sidebar__link sidebar__link--active">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="1.5" y="9.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+          Home
+        </a>
+        <a href="./tokens.css" class="sidebar__link" target="_blank">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg>
+          Design Tokens
+        </a>
       </div>
 
       <div class="sidebar__section">
-        <div class="sidebar__label">Coming soon</div>
-        <a class="sidebar__link" href="#">AI Chat</a>
-        <a class="sidebar__link" href="#">Calendar</a>
-        <a class="sidebar__link" href="#">Dialog</a>
-        <a class="sidebar__link" href="#">Forms</a>
-        <a class="sidebar__link" href="#">Menu</a>
-        <a class="sidebar__link" href="#">Navigation</a>
-        <a class="sidebar__link" href="#">Pagination</a>
-        <a class="sidebar__link" href="#">Text</a>
-        <a class="sidebar__link" href="#">Tooltip</a>
+        <p class="sidebar__section-label">Components</p>
+        <a href="./components/avatar.html" class="sidebar__link">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-2.761 2.686-5 6-5s6 2.239 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Avatar
+        </a>
+        <a href="./components/button.html" class="sidebar__link">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="4.5" width="13" height="7" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Button
+        </a>
+        <a href="./components/card.html" class="sidebar__link">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 6h8M4 9h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Card
+        </a>
+        <a href="./components/input.html" class="sidebar__link">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="4.5" width="13" height="7" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 8v0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Input
+        </a>
+        <a href="./components/notification.html" class="sidebar__link">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2a4.5 4.5 0 0 0-4.5 4.5v1.5L2 10h12l-1.5-2V6.5A4.5 4.5 0 0 0 8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.5 10v.5a1.5 1.5 0 0 0 3 0V10" stroke="currentColor" stroke-width="1.5"/></svg>
+          Notification
+        </a>
+        <a href="./components/tabs.html" class="sidebar__link">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 6h13v7a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V6z" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 6V4a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2M7.5 6V4a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2" stroke="currentColor" stroke-width="1.5"/></svg>
+          Tabs
+        </a>
+        <a href="./components/tag.html" class="sidebar__link">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8V3a1 1 0 0 1 1-1h5l5.5 5.5a1.5 1.5 0 0 1 0 2.121l-3.879 3.879a1.5 1.5 0 0 1-2.121 0L1.5 8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="5.5" cy="5.5" r="1" fill="currentColor"/></svg>
+          Tag
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <p class="sidebar__section-label">Coming soon</p>
+        <a href="#" class="sidebar__link" style="opacity:0.5;pointer-events:none;">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="3.5" width="13" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 7h13" stroke="currentColor" stroke-width="1.5"/></svg>
+          Dialog <span class="sidebar__badge">Soon</span>
+        </a>
+        <a href="#" class="sidebar__link" style="opacity:0.5;pointer-events:none;">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Accordion <span class="sidebar__badge">Soon</span>
+        </a>
+        <a href="#" class="sidebar__link" style="opacity:0.5;pointer-events:none;">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4h12M2 8h12M2 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Menu <span class="sidebar__badge">Soon</span>
+        </a>
+        <a href="#" class="sidebar__link" style="opacity:0.5;pointer-events:none;">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 13h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Pagination <span class="sidebar__badge">Soon</span>
+        </a>
+        <a href="#" class="sidebar__link" style="opacity:0.5;pointer-events:none;">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2a3 3 0 0 1 3 3c0 1.5-1 2.5-1 2.5H6S5 6.5 5 5a3 3 0 0 1 3-3zM6 10h4M7 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Tooltip <span class="sidebar__badge">Soon</span>
+        </a>
       </div>
     </nav>
 
-    <!-- Main content -->
-    <main class="main">
+    <div class="sidebar__footer">Nucleus Design System &copy; 2026</div>
+  </aside>
 
-      <!-- Hero -->
+  <!-- MAIN -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar__search">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input type="search" id="search-input" placeholder="Search components, tokens..." aria-label="Search" />
+      </div>
+      <div class="topbar__actions">
+        <a href="https://fonts.google.com/specimen/Inter" target="_blank" class="topbar__btn topbar__btn--ghost">Inter font</a>
+        <a href="./tokens.css" target="_blank" class="topbar__btn topbar__btn--primary">tokens.css</a>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- HERO -->
       <div class="hero">
-        <p class="hero__eyebrow">Design System</p>
-        <h1 class="hero__title">Nucleus</h1>
-        <p class="hero__subtitle">A collection of reusable components built from Figma design tokens — ready to copy, extend, and ship.</p>
-      </div>
-
-      <!-- Token preview strip -->
-      <div class="token-strip">
-        <span class="token-chip"><span class="token-chip__dot" style="background:#2c2c2c"></span>Brand</span>
-        <span class="token-chip"><span class="token-chip__dot" style="background:#ec221f"></span>Danger</span>
-        <span class="token-chip"><span class="token-chip__dot" style="background:#14ae5c"></span>Positive</span>
-        <span class="token-chip"><span class="token-chip__dot" style="background:#e8b931"></span>Warning</span>
-        <span class="token-chip"><span class="token-chip__dot" style="background:#e3e3e3; border:1px solid #d9d9d9"></span>Neutral</span>
-        <span class="token-chip">Inter · 16px body</span>
-        <span class="token-chip">8px radius</span>
-      </div>
-
-      <!-- Accordion -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Accordion</span>
-          <span class="section__count">2 components</span>
+        <div class="hero__badge"><span class="hero__badge-dot"></span>v1.0.0 &middot; Stable release</div>
+        <h1 class="hero__title">Nucleus<br>Design System</h1>
+        <p class="hero__subtitle">A complete, token-based design system built with vanilla HTML, CSS, and JavaScript. Every component is accessible, fully customizable, and production-ready.</p>
+        <div class="hero__actions">
+          <a href="./components/button.html" class="hero__btn hero__btn--primary">Browse components &rarr;</a>
+          <a href="./tokens.css" target="_blank" class="hero__btn hero__btn--ghost">View tokens.css</a>
         </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/accordion.html">
-            <span class="comp-card__name">Accordion</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-card__value">70+</div>
+          <div class="stat-card__label">Total components</div>
+          <div class="stat-card__delta">&#8593; Growing</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">7</div>
+          <div class="stat-card__label">Live component pages</div>
+          <div class="stat-card__delta">&#8593; Available now</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">80+</div>
+          <div class="stat-card__label">Design tokens</div>
+          <div class="stat-card__delta">All in tokens.css</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">0</div>
+          <div class="stat-card__label">Dependencies</div>
+          <div class="stat-card__delta">Pure vanilla stack</div>
+        </div>
+      </div>
+
+      <!-- ALL COMPONENTS -->
+      <div class="section-header">
+        <h2 class="section-title">All Components</h2>
+        <span class="section-count" id="count-display">70+ components across 17 categories</span>
+      </div>
+
+      <!-- ACCORDION -->
+      <div class="category-group" data-category="accordion">
+        <p class="category-label">Accordion</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview">
+              <svg width="80" height="52" viewBox="0 0 80 52" fill="none"><rect x="5" y="5" width="70" height="14" rx="3" stroke="#d9d9d9" stroke-width="1.5"/><path d="M12 12h42M64 12l-4 3.5-4-3.5" stroke="#b3b3b3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="5" y="24" width="70" height="23" rx="3" fill="#f5f5f5" stroke="#2c2c2c" stroke-width="1.5"/><path d="M12 33h42M64 33l-4-3.5-4 3.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 41h32" stroke="#b3b3b3" stroke-width="1.2" stroke-linecap="round"/></svg>
             </div>
+            <div class="component-card__meta"><span class="component-card__name">Accordion</span><span class="component-card__category">Expand / collapse panel</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview">
+              <svg width="80" height="52" viewBox="0 0 80 52" fill="none"><rect x="5" y="5" width="70" height="14" rx="2" fill="#2c2c2c"/><path d="M12 12h36M64 12l-3.5 3-3.5-3" stroke="#f5f5f5" stroke-width="1.2" stroke-linecap="round"/><rect x="5" y="24" width="70" height="14" rx="2" stroke="#d9d9d9" stroke-width="1.5"/><path d="M12 31h28" stroke="#b3b3b3" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Accordion Item</span><span class="component-card__category">Active / inactive state</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI CHAT -->
+      <div class="category-group" data-category="ai chat">
+        <p class="category-label">AI Chat</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="flex-direction:column;gap:5px;padding:10px;">
+              <div style="align-self:flex-end;background:#2c2c2c;color:#f5f5f5;padding:5px 9px;border-radius:10px 10px 2px 10px;font-size:10px;max-width:80%;">Hello!</div>
+              <div style="align-self:flex-start;background:#f5f5f5;color:#1e1e1e;padding:5px 9px;border-radius:10px 10px 10px 2px;font-size:10px;max-width:80%;border:1px solid #d9d9d9;">Hi there!</div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Chat Bubble</span><span class="component-card__category">User &amp; AI messages</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="width:85%;background:white;border:1px solid #d9d9d9;border-radius:8px;padding:7px 10px;display:flex;gap:6px;align-items:center;">
+                <span style="font-size:10px;color:#b3b3b3;flex:1;">Ask anything&hellip;</span>
+                <div style="width:20px;height:20px;border-radius:4px;background:#2c2c2c;display:flex;align-items:center;justify-content:center;"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="#f5f5f5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Chat Input</span><span class="component-card__category">Prompt entry field</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin" style="gap:6px;">
+              <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                <span style="padding:4px 8px;border-radius:12px;background:#f5f5f5;border:1px solid #d9d9d9;font-size:10px;color:#1e1e1e;">&#10022; Summarize</span>
+                <span style="padding:4px 8px;border-radius:12px;background:#f5f5f5;border:1px solid #d9d9d9;font-size:10px;color:#1e1e1e;">Copy</span>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Chat Actions</span><span class="component-card__category">Quick action chips</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="flex-direction:column;gap:4px;padding:10px;background:#f5f5f5;justify-content:flex-end;">
+              <div style="display:flex;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#b3b3b3;animation:none;"></span><span style="width:8px;height:8px;border-radius:50%;background:#b3b3b3;"></span><span style="width:8px;height:8px;border-radius:50%;background:#b3b3b3;"></span></div>
+              <p style="font-size:9px;color:#757575;">AI is typing...</p>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Typing Indicator</span><span class="component-card__category">Loading state</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin" style="flex-direction:column;gap:4px;">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:6px 10px;font-size:10px;font-family:'Courier New',monospace;color:#1e1e1e;">const x = 42;</div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Code Block</span><span class="component-card__category">Syntax-highlighted code</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVATARS -->
+      <div class="category-group" data-category="avatars">
+        <p class="category-label">Avatars</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/avatar.html">
+            <div class="component-card__preview" style="gap:8px;">
+              <span class="pav">JS</span>
+              <span class="pav" style="background:#4f46e5;width:32px;height:32px;font-size:11px;">AK</span>
+              <span class="pav" style="background:#0d9488;width:24px;height:24px;font-size:9px;border-radius:6px;">M</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Avatar</span><span class="component-card__category">Circle, Square &middot; 4 sizes</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
           </a>
-          <a class="comp-card comp-card--available" href="components/accordion-item.html">
-            <span class="comp-card__name">Accordion Item</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
+          <a class="component-card" href="./components/avatar.html">
+            <div class="component-card__preview" style="gap:4px;">
+              <div style="display:inline-flex;">
+                <span class="pav" style="border:2px solid white;">JS</span>
+                <span class="pav" style="background:#4f46e5;border:2px solid white;margin-left:-8px;">AK</span>
+                <span class="pav" style="background:#0d9488;border:2px solid white;margin-left:-8px;">MR</span>
+                <span class="pav" style="background:#e3e3e3;color:#303030;border:2px solid white;margin-left:-8px;font-size:12px;">+4</span>
+              </div>
             </div>
+            <div class="component-card__meta"><span class="component-card__name">Avatar Group</span><span class="component-card__category">Stacked with overflow</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
           </a>
-        </div>
-      </div>
-
-      <!-- Avatars -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Avatars</span>
-          <span class="section__count">3 components</span>
-        </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/avatar.html">
-            <span class="comp-card__name">Avatar</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
+          <a class="component-card" href="./components/avatar.html">
+            <div class="component-card__preview" style="gap:10px;">
+              <div style="position:relative;display:inline-flex;"><span class="pav">JS</span><span style="position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-radius:50%;background:#14ae5c;border:2px solid white;"></span></div>
+              <div style="position:relative;display:inline-flex;"><span class="pav" style="background:#e8b931;">TD</span><span style="position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-radius:50%;background:#e8b931;border:2px solid white;"></span></div>
             </div>
-          </a>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Avatar Block</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Avatar Group</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Buttons -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Buttons</span>
-          <span class="section__count">4 components</span>
-        </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/button.html">
-            <span class="comp-card__name">Button</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
-            </div>
-          </a>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Button Danger</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Icon Button</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Button Group</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cards -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Cards</span>
-          <span class="section__count">6 components</span>
-        </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/card.html">
-            <span class="comp-card__name">Card</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
-            </div>
-          </a>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Product Info Card</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Testimonial Card</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Stats Card</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Pricing Card</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Review Card</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Inputs -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Inputs</span>
-          <span class="section__count">11 components</span>
-        </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/input.html">
-            <span class="comp-card__name">Input Field</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
-            </div>
-          </a>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Checkbox Field</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Radio Field</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Select Field</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Textarea Field</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Switch Field</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Slider Field</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Search</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Date Picker Field</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Checkbox Group</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Radio Group</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Notification -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Notification</span>
-          <span class="section__count">1 component</span>
-        </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/notification.html">
-            <span class="comp-card__name">Notification</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
-            </div>
+            <div class="component-card__meta"><span class="component-card__name">Avatar + Status</span><span class="component-card__category">Online, Away, Busy, Offline</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
           </a>
         </div>
       </div>
 
-      <!-- Tabs -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Tabs</span>
-          <span class="section__count">2 components</span>
-        </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/tabs.html">
-            <span class="comp-card__name">Tabs</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
+      <!-- BUTTONS -->
+      <div class="category-group" data-category="buttons">
+        <p class="category-label">Buttons</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/button.html">
+            <div class="component-card__preview" style="gap:8px;flex-wrap:wrap;">
+              <span class="pb pb-p">Button</span>
+              <span class="pb pb-n">Button</span>
             </div>
+            <div class="component-card__meta"><span class="component-card__name">Button</span><span class="component-card__category">Primary, Neutral, Subtle</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
           </a>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Tab</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tags -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Tags</span>
-          <span class="section__count">3 components</span>
-        </div>
-        <div class="grid">
-          <a class="comp-card comp-card--available" href="components/tag.html">
-            <span class="comp-card__name">Tag</span>
-            <div class="comp-card__meta">
-              <span class="badge badge--ready">Ready</span>
-              <span class="comp-card__arrow">→</span>
+          <a class="component-card" href="./components/button.html">
+            <div class="component-card__preview" style="gap:8px;">
+              <span class="pb" style="background:#ec221f;border-color:#ec221f;color:#fee9e7;">Delete</span>
+              <span class="pb" style="background:transparent;border-color:transparent;color:#900b09;">Remove</span>
             </div>
+            <div class="component-card__meta"><span class="component-card__name">Danger Button</span><span class="component-card__category">Destructive actions</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
           </a>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Tag Toggle</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          <a class="component-card" href="./components/button.html">
+            <div class="component-card__preview" style="gap:8px;">
+              <span class="pb pb-p" style="width:34px;height:34px;padding:0;justify-content:center;border-radius:8px;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#f5f5f5" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+              <span class="pb pb-n" style="width:34px;height:34px;padding:0;justify-content:center;border-radius:8px;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h10M2 10h7" stroke="#1e1e1e" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Icon Button</span><span class="component-card__category">Icon-only variant</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/button.html">
+            <div class="component-card__preview" style="padding:12px;flex-direction:column;gap:6px;width:100%;">
+              <span class="pb pb-p" style="width:100%;justify-content:center;">Submit</span>
+              <span class="pb pb-n" style="width:100%;justify-content:center;">Cancel</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Full Width Button</span><span class="component-card__category">Block-level buttons</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="category-group" data-category="calendar">
+        <p class="category-label">Calendar</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:8px;width:100%;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:10px;font-weight:600;">March 2026</span><div style="display:flex;gap:6px;"><span style="font-size:10px;color:#767676;">&lsaquo;</span><span style="font-size:10px;color:#767676;">&rsaquo;</span></div></div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;">
+                  <span style="font-size:7px;color:#b3b3b3;">M</span><span style="font-size:7px;color:#b3b3b3;">T</span><span style="font-size:7px;color:#b3b3b3;">W</span><span style="font-size:7px;color:#b3b3b3;">T</span><span style="font-size:7px;color:#b3b3b3;">F</span><span style="font-size:7px;color:#b3b3b3;">S</span><span style="font-size:7px;color:#b3b3b3;">S</span>
+                  <span style="font-size:8px;background:#2c2c2c;color:#f5f5f5;border-radius:2px;">17</span><span style="font-size:8px;color:#1e1e1e;">18</span><span style="font-size:8px;color:#1e1e1e;">19</span><span style="font-size:8px;color:#1e1e1e;">20</span><span style="font-size:8px;color:#1e1e1e;">21</span><span style="font-size:8px;color:#b3b3b3;">22</span><span style="font-size:8px;color:#b3b3b3;">23</span>
+                </div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Calendar</span><span class="component-card__category">Date picker</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
           </div>
-          <div class="comp-card comp-card--unavailable">
-            <span class="comp-card__name">Tag Toggle Group</span>
-            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:8px;width:100%;">
+                <p style="font-size:10px;font-weight:600;color:#1e1e1e;margin-bottom:4px;">Select range</p>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="font-size:10px;padding:3px 6px;background:#2c2c2c;color:#f5f5f5;border-radius:4px;">Mar 17</span>
+                  <span style="font-size:10px;color:#b3b3b3;">&rarr;</span>
+                  <span style="font-size:10px;padding:3px 6px;background:#f5f5f5;border:1px dashed #d9d9d9;border-radius:4px;color:#b3b3b3;">End</span>
+                </div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Date Range Picker</span><span class="component-card__category">Range selection</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
           </div>
         </div>
       </div>
 
-      <!-- Coming Soon categories -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">AI Chat</span>
-          <span class="section__count">5 components</span>
-        </div>
-        <div class="grid">
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">AI Sidebar</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Chat Response</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Code Block</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Conversation</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">AI Chat Box</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+      <!-- CARDS -->
+      <div class="category-group" data-category="cards">
+        <p class="category-label">Cards</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/card.html">
+            <div class="component-card__preview pin">
+              <div style="width:80%;background:white;border:1px solid #d9d9d9;border-radius:6px;padding:8px 10px;">
+                <p style="font-size:11px;font-weight:600;color:#1e1e1e;">Card heading</p>
+                <span style="font-size:10px;color:#757575;">Body text content here</span>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Card &ndash; Stroke</span><span class="component-card__category">Vertical layout</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/card.html">
+            <div class="component-card__preview pin">
+              <div style="width:85%;background:white;border:1px solid #d9d9d9;border-radius:6px;display:flex;overflow:hidden;">
+                <div style="width:36px;background:linear-gradient(135deg,#667eea,#764ba2);flex-shrink:0;"></div>
+                <div style="padding:8px 10px;"><p style="font-size:11px;font-weight:600;color:#1e1e1e;">Title</p><span style="font-size:10px;color:#757575;">Description</span></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Card &ndash; Horizontal</span><span class="component-card__category">Side-by-side layout</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/card.html">
+            <div class="component-card__preview pin">
+              <div style="width:85%;background:white;border-radius:6px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+                <div style="height:36px;background:linear-gradient(135deg,#4facfe,#00f2fe);"></div>
+                <div style="padding:8px 10px;"><p style="font-size:11px;font-weight:600;color:#1e1e1e;">Elevated</p></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Card &ndash; Elevated</span><span class="component-card__category">Drop shadow</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/card.html">
+            <div class="component-card__preview pin">
+              <div style="width:85%;background:#f5f5f5;border-radius:6px;padding:10px 12px;">
+                <p style="font-size:11px;font-weight:600;color:#1e1e1e;">Filled card</p>
+                <span style="font-size:10px;color:#757575;">Secondary surface</span>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Card &ndash; Filled</span><span class="component-card__category">Tinted background</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/card.html">
+            <div class="component-card__preview pin">
+              <div style="width:85%;background:transparent;border:1px solid #d9d9d9;border-radius:6px;padding:10px 12px;">
+                <p style="font-size:11px;font-weight:600;color:#1e1e1e;">Ghost card</p>
+                <span style="font-size:10px;color:#757575;">Transparent bg</span>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Card &ndash; Ghost</span><span class="component-card__category">Transparent background</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:10px 12px;width:85%;">
+                <div style="display:flex;justify-content:space-between;align-items:center;"><p style="font-size:11px;font-weight:600;color:#1e1e1e;">Product</p><span style="font-size:12px;font-weight:700;color:#1e1e1e;">$49</span></div>
+                <span style="font-size:10px;color:#757575;">Pricing card layout</span>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Pricing Card</span><span class="component-card__category">Plan / pricing display</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
         </div>
       </div>
 
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Navigation</span>
-          <span class="section__count">4 components</span>
-        </div>
-        <div class="grid">
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Button</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Button List</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Pill</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Pill List</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+      <!-- DIALOG -->
+      <div class="category-group" data-category="dialog">
+        <p class="category-label">Dialog</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;background:rgba(0,0,0,0.04);">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:8px;padding:10px 12px;width:90%;box-shadow:0 4px 16px rgba(0,0,0,0.14);">
+                <p style="font-size:11px;font-weight:600;color:#1e1e1e;margin-bottom:4px;">Confirm action</p>
+                <p style="font-size:10px;color:#757575;margin-bottom:8px;">Are you sure you want to continue?</p>
+                <div style="display:flex;gap:4px;justify-content:flex-end;"><span class="pb pb-n" style="font-size:10px;padding:4px 8px;">Cancel</span><span class="pb pb-p" style="font-size:10px;padding:4px 8px;">Confirm</span></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Dialog</span><span class="component-card__category">Modal overlay</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;background:rgba(0,0,0,0.04);">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:8px;padding:10px 12px;width:90%;box-shadow:0 4px 16px rgba(0,0,0,0.14);">
+                <p style="font-size:11px;font-weight:600;color:#900b09;margin-bottom:4px;">Delete item</p>
+                <p style="font-size:10px;color:#757575;margin-bottom:8px;">This cannot be undone.</p>
+                <div style="display:flex;gap:4px;justify-content:flex-end;"><span class="pb pb-n" style="font-size:10px;padding:4px 8px;">Cancel</span><span class="pb" style="background:#ec221f;border-color:#ec221f;color:#fee9e7;font-size:10px;padding:4px 8px;">Delete</span></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Confirm Dialog</span><span class="component-card__category">Destructive confirm</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;background:rgba(0,0,0,0.04);">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:8px;padding:10px 12px;width:90%;box-shadow:0 4px 16px rgba(0,0,0,0.14);">
+                <p style="font-size:11px;font-weight:600;color:#1e1e1e;margin-bottom:6px;">Edit name</p>
+                <div style="background:white;border:1px solid #d9d9d9;border-radius:5px;padding:5px 8px;font-size:10px;color:#b3b3b3;margin-bottom:8px;">Enter name...</div>
+                <div style="display:flex;gap:4px;justify-content:flex-end;"><span class="pb pb-n" style="font-size:10px;padding:4px 8px;">Cancel</span><span class="pb pb-p" style="font-size:10px;padding:4px 8px;">Save</span></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Form Dialog</span><span class="component-card__category">Modal with form fields</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
         </div>
       </div>
 
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">Other</span>
-          <span class="section__count">Calendar · Dialog · Forms · Menu · Pagination · Text · Tooltip</span>
-        </div>
-        <div class="grid">
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Calendar</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Dialog</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Menu</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Pagination</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Text</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Tooltip</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
-          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Forms</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+      <!-- INPUTS -->
+      <div class="category-group" data-category="inputs">
+        <p class="category-label">Inputs</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/input.html">
+            <div class="component-card__preview pin">
+              <div style="width:90%;"><p style="font-size:11px;font-weight:600;margin-bottom:4px;color:#1e1e1e;">Label</p><div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:7px 10px;font-size:11px;color:#b3b3b3;">Placeholder</div></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Input Field</span><span class="component-card__category">Text, Email, Password</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/input.html">
+            <div class="component-card__preview pin">
+              <div style="width:90%;"><p style="font-size:11px;font-weight:600;margin-bottom:4px;color:#1e1e1e;">Bio</p><div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:7px 10px;font-size:11px;color:#b3b3b3;min-height:40px;">Write something...</div></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Textarea</span><span class="component-card__category">Multi-line text</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/input.html">
+            <div class="component-card__preview pin">
+              <div style="width:90%;background:white;border:1px solid #900b09;border-radius:6px;padding:7px 10px;font-size:11px;color:#1e1e1e;">invalid@</div>
+              <p style="font-size:9px;color:#900b09;width:90%;margin-top:4px;">Invalid email address.</p>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Input &ndash; Error</span><span class="component-card__category">Validation error state</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/input.html">
+            <div class="component-card__preview pin">
+              <div style="width:90%;background:#d9d9d9;border:1px solid #b3b3b3;border-radius:6px;padding:7px 10px;font-size:11px;color:#b3b3b3;">Disabled value</div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Input &ndash; Disabled</span><span class="component-card__category">Non-editable state</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/input.html">
+            <div class="component-card__preview pin">
+              <div style="width:90%;background:white;border:1px solid #d9d9d9;border-radius:6px;padding:7px 10px;display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="5.5" cy="5.5" r="3.5" stroke="#b3b3b3" stroke-width="1.2"/><path d="M8.5 8.5 10 10" stroke="#b3b3b3" stroke-width="1.2" stroke-linecap="round"/></svg><span style="font-size:11px;color:#b3b3b3;">Search...</span></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Search Input</span><span class="component-card__category">With leading icon</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/input.html">
+            <div class="component-card__preview pin">
+              <div style="width:90%;background:white;border:1px solid #d9d9d9;border-radius:6px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;color:#b3b3b3;">Choose...</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="#b3b3b3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Select</span><span class="component-card__category">Dropdown selector</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:12px;gap:8px;flex-direction:column;align-items:flex-start;">
+              <label style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;border:1.5px solid #2c2c2c;background:#2c2c2c;display:flex;align-items:center;justify-content:center;"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2 4-4" stroke="#f5f5f5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span style="font-size:11px;color:#1e1e1e;">Checked</span></label>
+              <label style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;border:1.5px solid #d9d9d9;background:white;"></span><span style="font-size:11px;color:#1e1e1e;">Unchecked</span></label>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Checkbox</span><span class="component-card__category">Boolean selection</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:12px;gap:8px;flex-direction:column;align-items:flex-start;">
+              <label style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:50%;border:1.5px solid #2c2c2c;background:white;display:flex;align-items:center;justify-content:center;"><span style="width:6px;height:6px;border-radius:50%;background:#2c2c2c;"></span></span><span style="font-size:11px;color:#1e1e1e;">Selected</span></label>
+              <label style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:50%;border:1.5px solid #d9d9d9;background:white;"></span><span style="font-size:11px;color:#1e1e1e;">Option B</span></label>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Radio</span><span class="component-card__category">Single selection</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:11px;color:#b3b3b3;">Off</span><span style="width:36px;height:20px;border-radius:10px;background:#2c2c2c;display:flex;align-items:center;padding:2px;flex-shrink:0;"><span style="width:16px;height:16px;border-radius:50%;background:white;margin-left:auto;"></span></span><span style="font-size:11px;color:#1e1e1e;font-weight:600;">On</span></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Toggle / Switch</span><span class="component-card__category">On / off control</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
         </div>
       </div>
 
-    </main>
-  </div>
+      <!-- MENU -->
+      <div class="category-group" data-category="menu">
+        <p class="category-label">Menu</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:4px;width:90%;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <div style="padding:6px 10px;font-size:11px;color:#1e1e1e;border-radius:4px;background:#f5f5f5;">Edit</div>
+                <div style="padding:6px 10px;font-size:11px;color:#1e1e1e;border-radius:4px;">Duplicate</div>
+                <div style="border-top:1px solid #d9d9d9;margin:4px 0;"></div>
+                <div style="padding:6px 10px;font-size:11px;color:#900b09;border-radius:4px;">Delete</div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Context Menu</span><span class="component-card__category">Right-click actions</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:4px;width:90%;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <p style="font-size:9px;color:#b3b3b3;padding:4px 10px 2px;text-transform:uppercase;letter-spacing:0.05em;">Account</p>
+                <div style="padding:6px 10px;font-size:11px;color:#1e1e1e;border-radius:4px;">Profile</div>
+                <div style="padding:6px 10px;font-size:11px;color:#1e1e1e;border-radius:4px;background:#f5f5f5;">Settings</div>
+                <div style="border-top:1px solid #d9d9d9;margin:4px 0;"></div>
+                <div style="padding:6px 10px;font-size:11px;color:#757575;border-radius:4px;">Sign out</div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Dropdown Menu</span><span class="component-card__category">Grouped actions</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;padding:4px;width:90%;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <div style="padding:6px 10px;font-size:11px;color:#1e1e1e;display:flex;align-items:center;justify-content:space-between;border-radius:4px;background:#f5f5f5;">Options <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M4 3l3 2-3 2" stroke="#767676" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div style="padding:6px 10px;font-size:11px;color:#1e1e1e;border-radius:4px;">Export</div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Submenu</span><span class="component-card__category">Nested navigation</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAVIGATION -->
+      <div class="category-group" data-category="navigation">
+        <p class="category-label">Navigation</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="background:white;border:1px solid #d9d9d9;border-radius:6px;overflow:hidden;width:90%;">
+                <div style="background:#2c2c2c;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;">
+                  <span style="font-size:10px;font-weight:600;color:#f5f5f5;">Nucleus</span>
+                  <div style="display:flex;gap:8px;"><span style="font-size:10px;color:#b3b3b3;">Docs</span><span style="font-size:10px;color:#b3b3b3;">GitHub</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Navbar</span><span class="component-card__category">Top navigation bar</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview pin">
+              <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;">
+                <span style="font-size:10px;color:#b3b3b3;">Home</span><span style="font-size:10px;color:#b3b3b3;">&rsaquo;</span>
+                <span style="font-size:10px;color:#b3b3b3;">Components</span><span style="font-size:10px;color:#b3b3b3;">&rsaquo;</span>
+                <span style="font-size:10px;color:#1e1e1e;font-weight:600;">Button</span>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Breadcrumb</span><span class="component-card__category">Path navigation</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;flex-direction:column;align-items:flex-start;gap:4px;">
+              <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:4px;background:#f5f5f5;width:80%;"><span style="font-size:11px;color:#1e1e1e;font-weight:600;">Overview</span></div>
+              <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:4px;width:80%;"><span style="font-size:11px;color:#767676;">Components</span></div>
+              <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:4px;width:80%;"><span style="font-size:11px;color:#767676;">Tokens</span></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Sidebar Nav</span><span class="component-card__category">Vertical navigation</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;gap:4px;flex-wrap:wrap;">
+              <span class="pb pb-p" style="padding:5px 10px;font-size:10px;border-radius:20px;">Home</span>
+              <span class="pb pb-n" style="padding:5px 10px;font-size:10px;border-radius:20px;">About</span>
+              <span class="pb" style="padding:5px 10px;font-size:10px;border-radius:20px;background:transparent;border-color:transparent;color:#767676;">Contact</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Nav Pills</span><span class="component-card__category">Pill navigation style</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATION -->
+      <div class="category-group" data-category="notification">
+        <p class="category-label">Notification</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/notification.html">
+            <div class="component-card__preview pin">
+              <div class="pnotif">
+                <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#767676" stroke-width="1.2"/><path d="M7 6.5v3M7 5v.5" stroke="#767676" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <div><p style="font-size:10px;font-weight:600;color:#1e1e1e;">Update available</p><p style="font-size:9px;color:#757575;">Refresh to apply.</p></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Notification &ndash; Info</span><span class="component-card__category">Message banner</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/notification.html">
+            <div class="component-card__preview pin">
+              <div class="pnotif" style="background:#fee9e7;border-color:#ec221f;">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M7 1.5L1 12.5h12L7 1.5z" stroke="#900b09" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 6v3M7 10v.5" stroke="#900b09" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <div><p style="font-size:10px;font-weight:600;color:#900b09;">Account suspended</p><p style="font-size:9px;color:#900b09;">Update billing.</p></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Notification &ndash; Danger</span><span class="component-card__category">Error / alert state</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/notification.html">
+            <div class="component-card__preview pin">
+              <div class="pnotif" style="background:#cff7d3;border-color:#14ae5c;">
+                <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#14ae5c" stroke-width="1.2"/><path d="M4.5 7l2 2 3-3" stroke="#14ae5c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div><p style="font-size:10px;font-weight:600;color:#02542d;">Saved successfully</p></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Notification &ndash; Positive</span><span class="component-card__category">Success state</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/notification.html">
+            <div class="component-card__preview pin">
+              <div class="pnotif" style="background:#fff1c2;border-color:#e8b931;">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M7 1.5L1 12.5h12L7 1.5z" stroke="#682d03" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 6v3M7 10v.5" stroke="#682d03" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <div><p style="font-size:10px;font-weight:600;color:#401b01;">Trial expiring</p><p style="font-size:9px;color:#682d03;">3 days left.</p></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Notification &ndash; Warning</span><span class="component-card__category">Warning state</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/notification.html">
+            <div class="component-card__preview" style="padding:10px;flex-direction:column;align-items:flex-end;">
+              <div class="pnotif" style="width:80%;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#14ae5c" stroke-width="1.2"/><path d="M4.5 7l2 2 3-3" stroke="#14ae5c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div><p style="font-size:10px;font-weight:600;color:#1e1e1e;">Changes saved</p></div>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Toast</span><span class="component-card__category">Floating notification</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="category-group" data-category="pagination">
+        <p class="category-label">Pagination</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="gap:4px;">
+              <span class="pb pb-n" style="padding:4px 8px;font-size:11px;">&lsaquo;</span>
+              <span class="pb pb-n" style="padding:4px 8px;font-size:11px;">1</span>
+              <span class="pb pb-p" style="padding:4px 8px;font-size:11px;">2</span>
+              <span class="pb pb-n" style="padding:4px 8px;font-size:11px;">3</span>
+              <span class="pb pb-n" style="padding:4px 8px;font-size:11px;">&rsaquo;</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Pagination</span><span class="component-card__category">Page navigation</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="gap:6px;align-items:center;">
+              <span class="pb pb-n" style="padding:5px 12px;font-size:11px;">&larr; Prev</span>
+              <span style="font-size:11px;color:#767676;">2 of 12</span>
+              <span class="pb pb-n" style="padding:5px 12px;font-size:11px;">Next &rarr;</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Pagination &ndash; Simple</span><span class="component-card__category">Prev / Next buttons</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="category-group" data-category="tabs">
+        <p class="category-label">Tabs</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/tabs.html">
+            <div class="component-card__preview" style="padding:10px;flex-direction:column;align-items:flex-start;gap:0;">
+              <div style="display:flex;border-bottom:1px solid #d9d9d9;width:100%;">
+                <span style="padding:6px 10px;border-bottom:2px solid #303030;font-size:12px;font-weight:600;color:#303030;">Overview</span>
+                <span style="padding:6px 10px;border-bottom:2px solid transparent;font-size:12px;color:#767676;">Analytics</span>
+                <span style="padding:6px 10px;border-bottom:2px solid transparent;font-size:12px;color:#767676;">Settings</span>
+              </div>
+              <div style="padding:8px 4px 0;"><p style="font-size:10px;color:#757575;">Tab content area</p></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tabs &ndash; Line</span><span class="component-card__category">Bottom border indicator</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/tabs.html">
+            <div class="component-card__preview pin">
+              <div style="display:flex;background:#f5f5f5;border-radius:6px;padding:3px;gap:2px;">
+                <span style="padding:5px 10px;border-radius:4px;background:white;font-size:11px;font-weight:600;color:#1e1e1e;box-shadow:0 1px 3px rgba(0,0,0,0.1);">All</span>
+                <span style="padding:5px 10px;border-radius:4px;font-size:11px;color:#767676;">Active</span>
+                <span style="padding:5px 10px;border-radius:4px;font-size:11px;color:#767676;">Drafts</span>
+              </div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tabs &ndash; Pill</span><span class="component-card__category">Segmented control</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/tabs.html">
+            <div class="component-card__preview" style="padding:10px;flex-direction:row;gap:0;align-items:stretch;">
+              <div style="display:flex;flex-direction:column;border-right:1px solid #d9d9d9;gap:0;width:70px;flex-shrink:0;">
+                <div style="padding:6px 8px;font-size:10px;font-weight:600;color:#303030;border-right:2px solid #303030;">General</div>
+                <div style="padding:6px 8px;font-size:10px;color:#767676;">Security</div>
+                <div style="padding:6px 8px;font-size:10px;color:#767676;">Privacy</div>
+              </div>
+              <div style="padding:8px 10px;"><p style="font-size:10px;color:#757575;">Panel</p></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tabs &ndash; Vertical</span><span class="component-card__category">Side navigation style</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/tabs.html">
+            <div class="component-card__preview" style="padding:10px;flex-direction:column;align-items:flex-start;gap:0;">
+              <div style="display:flex;background:#f5f5f5;gap:0;">
+                <div style="padding:8px 14px;font-size:11px;font-weight:600;color:#303030;background:white;border:1px solid #d9d9d9;border-bottom:none;border-radius:4px 4px 0 0;border-top:2px solid #303030;">Overview</div>
+                <div style="padding:8px 14px;font-size:11px;color:#767676;background:#f5f5f5;">Reports</div>
+              </div>
+              <div style="padding:8px 10px;border:1px solid #d9d9d9;width:100%;"><p style="font-size:10px;color:#757575;">Content</p></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tabs &ndash; Card</span><span class="component-card__category">Card-style tabs</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- TAGS -->
+      <div class="category-group" data-category="tags">
+        <p class="category-label">Tags</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/tag.html">
+            <div class="component-card__preview" style="gap:6px;flex-wrap:wrap;padding:10px;">
+              <span class="ptag" style="background:#2c2c2c;border-color:#2c2c2c;color:#f5f5f5;">Brand</span>
+              <span class="ptag" style="background:#e3e3e3;border-color:#767676;color:#303030;">Neutral</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tag &ndash; Primary</span><span class="component-card__category">Solid background</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/tag.html">
+            <div class="component-card__preview" style="gap:6px;flex-wrap:wrap;padding:10px;">
+              <span class="ptag" style="background:#cff7d3;border-color:#14ae5c;color:#02542d;">Active</span>
+              <span class="ptag" style="background:#fee9e7;border-color:#900b09;color:#900b09;">Failed</span>
+              <span class="ptag" style="background:#fff1c2;border-color:#e8b931;color:#682d03;">Review</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tag &ndash; Secondary</span><span class="component-card__category">Tinted color variants</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/tag.html">
+            <div class="component-card__preview" style="gap:6px;flex-wrap:wrap;padding:10px;">
+              <span class="ptag" style="background:#2c2c2c;border-color:#2c2c2c;color:#f5f5f5;border-radius:9999px;">Design</span>
+              <span class="ptag" style="background:#cff7d3;border-color:#14ae5c;color:#02542d;border-radius:9999px;display:inline-flex;align-items:center;gap:4px;">Active <span style="font-size:10px;">&times;</span></span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tag &ndash; Pill</span><span class="component-card__category">Pill shape + dismiss</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <a class="component-card" href="./components/tag.html">
+            <div class="component-card__preview" style="gap:6px;align-items:flex-end;padding:10px;">
+              <span class="ptag" style="background:#2c2c2c;border-color:#2c2c2c;color:#f5f5f5;font-size:10px;padding:2px 7px;">S</span>
+              <span class="ptag" style="background:#e3e3e3;border-color:#767676;color:#303030;">Medium</span>
+              <span class="ptag" style="background:#cff7d3;border-color:#14ae5c;color:#02542d;font-size:14px;padding:6px 14px;">Large</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tag Sizes</span><span class="component-card__category">Small, Medium, Large</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- TEXT -->
+      <div class="category-group" data-category="text">
+        <p class="category-label">Text</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:12px;flex-direction:column;align-items:flex-start;gap:4px;">
+              <p style="font-size:18px;font-weight:700;color:#1e1e1e;letter-spacing:-0.02em;line-height:1.1;">Heading 1</p>
+              <p style="font-size:14px;font-weight:600;color:#1e1e1e;">Heading 2</p>
+              <p style="font-size:11px;font-weight:600;color:#1e1e1e;">Heading 3</p>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Heading</span><span class="component-card__category">H1 &ndash; H6 type scale</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:12px;flex-direction:column;align-items:flex-start;gap:4px;">
+              <p style="font-size:13px;color:#1e1e1e;line-height:1.5;">Regular 16px body text with comfortable line height for reading.</p>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Body Text</span><span class="component-card__category">Medium &amp; Small</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:12px;flex-direction:column;align-items:flex-start;gap:4px;">
+              <p style="font-size:10px;font-weight:600;color:#b3b3b3;text-transform:uppercase;letter-spacing:0.07em;">Overline</p>
+              <p style="font-size:11px;color:#757575;">Helper / hint text</p>
+              <span style="font-size:11px;color:#1e1e1e;font-weight:600;text-decoration:underline;">Link style</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Text Styles</span><span class="component-card__category">Labels, Links, Hints</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLTIP -->
+      <div class="category-group" data-category="tooltip">
+        <p class="category-label">Tooltip</p>
+        <div class="component-grid">
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;flex-direction:column;align-items:center;gap:3px;">
+              <div style="background:#1e1e1e;color:#f5f5f5;font-size:10px;padding:4px 8px;border-radius:4px;">Tooltip text</div>
+              <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #1e1e1e;"></div>
+              <span class="pb pb-n" style="font-size:10px;padding:4px 8px;">Hover me</span>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tooltip &ndash; Top</span><span class="component-card__category">Above target</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;flex-direction:row;align-items:center;gap:3px;justify-content:center;">
+              <span class="pb pb-n" style="font-size:10px;padding:4px 8px;">Target</span>
+              <div style="width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid #1e1e1e;"></div>
+              <div style="background:#1e1e1e;color:#f5f5f5;font-size:10px;padding:4px 8px;border-radius:4px;white-space:nowrap;">Right tooltip</div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Tooltip &ndash; Right</span><span class="component-card__category">Right placement</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMS -->
+      <div class="category-group" data-category="forms">
+        <p class="category-label">Forms</p>
+        <div class="component-grid">
+          <a class="component-card" href="./components/input.html">
+            <div class="component-card__preview" style="padding:10px;flex-direction:column;gap:6px;align-items:flex-start;width:100%;">
+              <div style="width:100%;"><p style="font-size:10px;font-weight:600;color:#1e1e1e;margin-bottom:3px;">Name <span style="color:#900b09;">*</span></p><div style="background:white;border:1px solid #d9d9d9;border-radius:5px;padding:5px 8px;font-size:10px;color:#1e1e1e;">Jordan Smith</div></div>
+              <div style="width:100%;"><p style="font-size:10px;font-weight:600;color:#1e1e1e;margin-bottom:3px;">Email <span style="color:#900b09;">*</span></p><div style="background:white;border:1px solid #900b09;border-radius:5px;padding:5px 8px;font-size:10px;color:#1e1e1e;">invalid</div><p style="font-size:9px;color:#900b09;margin-top:2px;">Invalid email.</p></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Form Group</span><span class="component-card__category">Inputs with validation</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--stable">Stable</span><span class="component-card__link">View &rarr;</span></div>
+          </a>
+          <div class="component-card" style="opacity:0.6;cursor:default;">
+            <div class="component-card__preview" style="padding:10px;flex-direction:column;gap:6px;align-items:flex-start;width:100%;">
+              <div style="width:100%;"><p style="font-size:10px;font-weight:600;color:#1e1e1e;margin-bottom:3px;">Login</p><div style="background:white;border:1px solid #d9d9d9;border-radius:5px;padding:5px 8px;font-size:10px;color:#b3b3b3;margin-bottom:4px;">Email...</div><div style="background:white;border:1px solid #d9d9d9;border-radius:5px;padding:5px 8px;font-size:10px;color:#b3b3b3;margin-bottom:6px;">Password...</div><div class="pb pb-p" style="font-size:10px;padding:5px;width:100%;justify-content:center;">Sign in</div></div>
+            </div>
+            <div class="component-card__meta"><span class="component-card__name">Login Form</span><span class="component-card__category">Authentication form</span></div>
+            <div class="component-card__footer"><span class="component-card__status status--planned">Planned</span><span class="component-card__link">View &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- COLOR TOKENS -->
+      <div class="section-header">
+        <h2 class="section-title">Color Tokens</h2>
+        <span class="section-count">Core palette from tokens.css</span>
+      </div>
+      <div class="token-grid">
+        <div class="tc"><div class="tc__sw" style="background:#1e1e1e;"></div><div class="tc__i"><div class="tc__n">Text default</div><div class="tc__v">#1e1e1e</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#757575;"></div><div class="tc__i"><div class="tc__n">Text secondary</div><div class="tc__v">#757575</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#b3b3b3;"></div><div class="tc__i"><div class="tc__n">Text tertiary</div><div class="tc__v">#b3b3b3</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#2c2c2c;"></div><div class="tc__i"><div class="tc__n">Brand default</div><div class="tc__v">#2c2c2c</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#1e1e1e;"></div><div class="tc__i"><div class="tc__n">Brand hover</div><div class="tc__v">#1e1e1e</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#ffffff;border:1px solid #d9d9d9;"></div><div class="tc__i"><div class="tc__n">BG default</div><div class="tc__v">#ffffff</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#f5f5f5;"></div><div class="tc__i"><div class="tc__n">BG secondary</div><div class="tc__v">#f5f5f5</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#d9d9d9;"></div><div class="tc__i"><div class="tc__n">BG tertiary</div><div class="tc__v">#d9d9d9</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#e3e3e3;"></div><div class="tc__i"><div class="tc__n">Neutral tertiary</div><div class="tc__v">#e3e3e3</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#14ae5c;"></div><div class="tc__i"><div class="tc__n">Positive</div><div class="tc__v">#14ae5c</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#cff7d3;"></div><div class="tc__i"><div class="tc__n">Positive secondary</div><div class="tc__v">#cff7d3</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#ec221f;"></div><div class="tc__i"><div class="tc__n">Danger</div><div class="tc__v">#ec221f</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#fee9e7;"></div><div class="tc__i"><div class="tc__n">Danger tertiary</div><div class="tc__v">#fee9e7</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#e8b931;"></div><div class="tc__i"><div class="tc__n">Warning</div><div class="tc__v">#e8b931</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#fff1c2;"></div><div class="tc__i"><div class="tc__n">Warning secondary</div><div class="tc__v">#fff1c2</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#d9d9d9;"></div><div class="tc__i"><div class="tc__n">Border default</div><div class="tc__v">#d9d9d9</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#303030;"></div><div class="tc__i"><div class="tc__n">Border neutral</div><div class="tc__v">#303030</div></div></div>
+        <div class="tc"><div class="tc__sw" style="background:#900b09;"></div><div class="tc__i"><div class="tc__n">Border danger</div><div class="tc__v">#900b09</div></div></div>
+      </div>
+
+    </div><!-- /content -->
+
+    <footer class="page-footer">
+      <p class="page-footer__copy">Nucleus Design System &copy; 2026 &middot; Vanilla HTML/CSS/JS &middot; Zero dependencies</p>
+      <nav class="page-footer__links" aria-label="Footer links">
+        <a href="./tokens.css" target="_blank" class="page-footer__link">tokens.css</a>
+        <a href="./components/button.html" class="page-footer__link">Components</a>
+        <a href="#" class="page-footer__link">GitHub</a>
+        <a href="#" class="page-footer__link">Figma</a>
+      </nav>
+    </footer>
+
+  </div><!-- /main -->
+
+</div><!-- /layout -->
+
+<script>
+  var searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var q = this.value.toLowerCase().trim();
+      var cards = document.querySelectorAll('.component-card');
+      var visible = 0;
+      cards.forEach(function(card) {
+        var name = (card.querySelector('.component-card__name') || {textContent:''}).textContent;
+        var cat  = (card.querySelector('.component-card__category') || {textContent:''}).textContent;
+        var show = !q || name.toLowerCase().includes(q) || cat.toLowerCase().includes(q);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.querySelectorAll('.category-group').forEach(function(group) {
+        var shown = group.querySelectorAll('.component-card:not([style*="display: none"])').length;
+        group.style.display = shown === 0 ? 'none' : '';
+      });
+      var countEl = document.getElementById('count-display');
+      if (countEl) {
+        countEl.textContent = q ? (visible + ' result' + (visible !== 1 ? 's' : '') + ' found') : '70+ components across 17 categories';
+      }
+    });
+  }
+</script>
 </body>
 </html>
