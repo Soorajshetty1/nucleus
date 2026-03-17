@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tag – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      color: var(--sds-color-text-default-default);
+      padding: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--sds-color-text-default-default); }
+
+    h1 {
+      font-size: var(--sds-typography-heading-size-base);
+      font-weight: var(--sds-typography-heading-font-weight);
+      letter-spacing: var(--sds-typography-heading-letter-spacing);
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary);
+      margin-bottom: 40px;
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .section { margin-bottom: 48px; }
+
+    h2 {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .demo-card {
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 32px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .row:last-child { margin-bottom: 0; }
+
+    .row-label {
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      min-width: 90px;
+    }
+
+    /* ── Base Tag ── */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--sds-size-space-200) var(--sds-size-space-300);
+      border-radius: var(--sds-size-radius-200);
+      font-family: var(--sds-typography-body-font-family);
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-regular);
+      line-height: 1;
+      border: var(--sds-size-stroke-border) solid transparent;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* ── Tag sizes ── */
+    .tag--sm {
+      padding: 4px var(--sds-size-space-200);
+      font-size: 12px;
+    }
+
+    .tag--lg {
+      padding: var(--sds-size-space-300) var(--sds-size-space-400);
+      font-size: var(--sds-typography-body-size-medium);
+    }
+
+    /* ── Dismiss button ── */
+    .tag__dismiss {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      color: inherit;
+      opacity: 0.7;
+      transition: opacity 0.1s ease;
+      margin-left: 2px;
+    }
+    .tag__dismiss:hover { opacity: 1; }
+    .tag__dismiss svg { width: 10px; height: 10px; }
+
+    /* ── Tag dot ── */
+    .tag__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Tag icon ── */
+    .tag__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tag__icon svg { width: 12px; height: 12px; }
+
+    /* ═══════════════════════════════════════════
+       BRAND
+    ═══════════════════════════════════════════ */
+    .tag--brand-primary {
+      background: var(--sds-color-background-brand-default);
+      border-color: var(--sds-color-border-brand-default);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+    .tag--brand-secondary {
+      background: var(--sds-color-background-brand-tertiary);
+      border-color: var(--sds-color-border-brand-default);
+      color: var(--sds-color-text-brand-on-brand-tertiary);
+    }
+
+    /* ═══════════════════════════════════════════
+       NEUTRAL
+    ═══════════════════════════════════════════ */
+    .tag--neutral-primary {
+      background: var(--sds-color-background-neutral-tertiary);
+      border-color: var(--sds-color-border-neutral-secondary);
+      color: var(--sds-color-text-neutral-default);
+    }
+    .tag--neutral-secondary {
+      background: var(--sds-color-background-default-secondary);
+      border-color: var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+    }
+
+    /* ═══════════════════════════════════════════
+       POSITIVE
+    ═══════════════════════════════════════════ */
+    .tag--positive-primary {
+      background: var(--sds-color-background-positive-default);
+      border-color: var(--sds-color-background-positive-default);
+      color: var(--sds-color-text-positive-on-positive);
+    }
+    .tag--positive-secondary {
+      background: var(--sds-color-background-positive-secondary);
+      border-color: var(--sds-color-background-positive-default);
+      color: var(--sds-color-text-positive-on-positive-secondary);
+    }
+
+    /* ═══════════════════════════════════════════
+       DANGER
+    ═══════════════════════════════════════════ */
+    .tag--danger-primary {
+      background: var(--sds-color-background-danger-default);
+      border-color: var(--sds-color-background-danger-default);
+      color: var(--sds-color-text-danger-on-danger);
+    }
+    .tag--danger-secondary {
+      background: var(--sds-color-background-danger-tertiary);
+      border-color: var(--sds-color-border-danger-default);
+      color: var(--sds-color-text-danger-default);
+    }
+
+    /* ═══════════════════════════════════════════
+       WARNING
+    ═══════════════════════════════════════════ */
+    .tag--warning-primary {
+      background: var(--sds-color-background-warning-default);
+      border-color: var(--sds-color-background-warning-default);
+      color: var(--sds-color-text-warning-on-warning);
+    }
+    .tag--warning-secondary {
+      background: var(--sds-color-background-warning-secondary);
+      border-color: var(--sds-color-background-warning-default);
+      color: var(--sds-color-text-warning-on-warning-secondary);
+    }
+
+    /* ═══════════════════════════════════════════
+       DISABLED
+    ═══════════════════════════════════════════ */
+    .tag--disabled {
+      background: var(--sds-color-background-disabled-default);
+      border-color: var(--sds-color-border-disabled-default);
+      color: var(--sds-color-text-disabled-on-disabled);
+      cursor: not-allowed;
+    }
+
+    /* ── Rounded / Pill tags ── */
+    .tag--pill {
+      border-radius: var(--sds-size-radius-full);
+    }
+
+    /* Token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--sds-typography-body-size-small);
+    }
+    .token-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--sds-color-background-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+    }
+    .token-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+      font-family: 'Courier New', monospace;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+
+    .color-swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,0.1);
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="back-link">← Back to Nucleus</a>
+
+  <h1>Tag</h1>
+  <p class="page-desc">Tags are used to label, categorize, or organize items using keywords that describe them. They support multiple color schemes and an optional dismiss action.</p>
+
+  <!-- BRAND -->
+  <div class="section">
+    <h2>Brand</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Primary</span>
+        <span class="tag tag--brand-primary">Design System</span>
+        <span class="tag tag--brand-primary">
+          Nucleus
+          <button class="tag__dismiss" aria-label="Remove Nucleus tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--brand-primary tag--pill">Pill style</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Secondary</span>
+        <span class="tag tag--brand-secondary">Design System</span>
+        <span class="tag tag--brand-secondary">
+          Nucleus
+          <button class="tag__dismiss" aria-label="Remove Nucleus tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--brand-secondary tag--pill">Pill style</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEUTRAL -->
+  <div class="section">
+    <h2>Neutral</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Primary</span>
+        <span class="tag tag--neutral-primary">Draft</span>
+        <span class="tag tag--neutral-primary">
+          In Review
+          <button class="tag__dismiss" aria-label="Remove In Review tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--neutral-primary tag--pill">Archived</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Secondary</span>
+        <span class="tag tag--neutral-secondary">Draft</span>
+        <span class="tag tag--neutral-secondary">
+          In Review
+          <button class="tag__dismiss" aria-label="Remove In Review tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--neutral-secondary tag--pill">Archived</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- POSITIVE -->
+  <div class="section">
+    <h2>Positive</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Primary</span>
+        <span class="tag tag--positive-primary">Active</span>
+        <span class="tag tag--positive-primary">
+          Published
+          <button class="tag__dismiss" aria-label="Remove Published tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--positive-primary tag--pill">Online</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Secondary</span>
+        <span class="tag tag--positive-secondary">Active</span>
+        <span class="tag tag--positive-secondary">
+          Published
+          <button class="tag__dismiss" aria-label="Remove Published tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--positive-secondary tag--pill">Online</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DANGER -->
+  <div class="section">
+    <h2>Danger</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Primary</span>
+        <span class="tag tag--danger-primary">Critical</span>
+        <span class="tag tag--danger-primary">
+          Failed
+          <button class="tag__dismiss" aria-label="Remove Failed tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--danger-primary tag--pill">Error</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Secondary</span>
+        <span class="tag tag--danger-secondary">Critical</span>
+        <span class="tag tag--danger-secondary">
+          Failed
+          <button class="tag__dismiss" aria-label="Remove Failed tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--danger-secondary tag--pill">Error</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WARNING -->
+  <div class="section">
+    <h2>Warning</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Primary</span>
+        <span class="tag tag--warning-primary">Pending</span>
+        <span class="tag tag--warning-primary">
+          Under review
+          <button class="tag__dismiss" aria-label="Remove Under review tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--warning-primary tag--pill">Expiring</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Secondary</span>
+        <span class="tag tag--warning-secondary">Pending</span>
+        <span class="tag tag--warning-secondary">
+          Under review
+          <button class="tag__dismiss" aria-label="Remove Under review tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--warning-secondary tag--pill">Expiring</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISABLED -->
+  <div class="section">
+    <h2>Disabled</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Disabled</span>
+        <span class="tag tag--disabled">Unavailable</span>
+        <span class="tag tag--disabled tag--pill">Disabled</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIZES -->
+  <div class="section">
+    <h2>Sizes</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Small</span>
+        <span class="tag tag--brand-primary tag--sm">Label</span>
+        <span class="tag tag--positive-secondary tag--sm">Active</span>
+        <span class="tag tag--danger-secondary tag--sm">Error</span>
+        <span class="tag tag--warning-secondary tag--sm">Pending</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Medium</span>
+        <span class="tag tag--brand-primary">Label</span>
+        <span class="tag tag--positive-secondary">Active</span>
+        <span class="tag tag--danger-secondary">Error</span>
+        <span class="tag tag--warning-secondary">Pending</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Large</span>
+        <span class="tag tag--brand-primary tag--lg">Label</span>
+        <span class="tag tag--positive-secondary tag--lg">Active</span>
+        <span class="tag tag--danger-secondary tag--lg">Error</span>
+        <span class="tag tag--warning-secondary tag--lg">Pending</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WITH DOT INDICATOR -->
+  <div class="section">
+    <h2>With Dot Indicator</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="tag tag--positive-secondary">
+          <span class="tag__dot" style="background: var(--sds-color-background-positive-default);"></span>
+          Online
+        </span>
+        <span class="tag tag--danger-secondary">
+          <span class="tag__dot" style="background: var(--sds-color-background-danger-default);"></span>
+          Offline
+        </span>
+        <span class="tag tag--warning-secondary">
+          <span class="tag__dot" style="background: var(--sds-color-background-warning-default);"></span>
+          Away
+        </span>
+        <span class="tag tag--neutral-secondary">
+          <span class="tag__dot" style="background: var(--sds-color-background-neutral-tertiary);"></span>
+          Unknown
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- REAL WORLD EXAMPLE -->
+  <div class="section">
+    <h2>Real World Usage</h2>
+    <div class="demo-card">
+      <p style="font-size: var(--sds-typography-body-size-small); color: var(--sds-color-text-default-secondary); margin-bottom: 16px;">Tag cloud for filtering an article list:</p>
+      <div class="row" id="tag-cloud">
+        <span class="tag tag--brand-primary tag--pill" data-tag="Design">
+          Design
+          <button class="tag__dismiss" aria-label="Remove Design tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--neutral-secondary tag--pill" data-tag="Engineering">
+          Engineering
+          <button class="tag__dismiss" aria-label="Remove Engineering tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--positive-secondary tag--pill" data-tag="Accessibility">
+          Accessibility
+          <button class="tag__dismiss" aria-label="Remove Accessibility tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+        <span class="tag tag--warning-secondary tag--pill" data-tag="Performance">
+          Performance
+          <button class="tag__dismiss" aria-label="Remove Performance tag">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN TOKENS -->
+  <div class="section">
+    <h2>Design Tokens</h2>
+    <div class="demo-card">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Token</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Padding</td><td>--sds-size-space-200 / --sds-size-space-300</td><td>8px / 12px</td></tr>
+          <tr><td>Border Radius</td><td>--sds-size-radius-200</td><td>8px</td></tr>
+          <tr><td>Border Radius (Pill)</td><td>--sds-size-radius-full</td><td>9999px</td></tr>
+          <tr><td>Brand BG (Primary)</td><td>--sds-color-background-brand-default</td><td>#2c2c2c</td></tr>
+          <tr><td>Positive BG (Primary)</td><td>--sds-color-background-positive-default</td><td>#14ae5c</td></tr>
+          <tr><td>Danger BG (Primary)</td><td>--sds-color-background-danger-default</td><td>#ec221f</td></tr>
+          <tr><td>Warning BG (Primary)</td><td>--sds-color-background-warning-default</td><td>#e8b931</td></tr>
+          <tr><td>Disabled BG</td><td>--sds-color-background-disabled-default</td><td>#d9d9d9</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Dismiss tags
+    document.querySelectorAll('.tag__dismiss').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.closest('.tag');
+        if (tag) {
+          tag.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+          tag.style.opacity = '0';
+          tag.style.transform = 'scale(0.85)';
+          setTimeout(() => tag.remove(), 150);
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      color: var(--sds-color-text-default-default);
+      padding: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--sds-color-text-default-default); }
+
+    h1 {
+      font-size: var(--sds-typography-heading-size-base);
+      font-weight: var(--sds-typography-heading-font-weight);
+      letter-spacing: var(--sds-typography-heading-letter-spacing);
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary);
+      margin-bottom: 40px;
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .section { margin-bottom: 48px; }
+
+    h2 {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .demo-card {
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 32px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 32px;
+    }
+
+    /* ── Field wrapper ── */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field__label {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-default);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .field__label .required {
+      color: var(--sds-color-text-danger-default);
+    }
+
+    .field__description {
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      line-height: var(--sds-typography-body-line-height);
+      margin-bottom: 2px;
+    }
+
+    /* ── Input box ── */
+    .input {
+      display: flex;
+      align-items: center;
+      gap: var(--sds-size-space-200);
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: var(--sds-size-padding-md) var(--sds-size-padding-lg);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .input:focus-within {
+      border-color: var(--sds-color-border-neutral-default);
+      box-shadow: 0 0 0 3px rgba(48, 48, 48, 0.08);
+    }
+
+    .input input,
+    .input textarea,
+    .input select {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: var(--sds-typography-body-size-medium);
+      font-weight: var(--sds-typography-body-font-weight-regular);
+      color: var(--sds-color-text-default-default);
+      line-height: var(--sds-typography-body-line-height);
+      width: 100%;
+    }
+
+    .input input::placeholder,
+    .input textarea::placeholder {
+      color: var(--sds-color-text-default-tertiary);
+    }
+
+    /* ── Input icon addon ── */
+    .input__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sds-color-text-default-secondary);
+      flex-shrink: 0;
+    }
+
+    .input__icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ── Error state ── */
+    .field--error .input {
+      border-color: var(--sds-color-border-danger-default);
+      background: #fff;
+    }
+    .field--error .input:focus-within {
+      border-color: var(--sds-color-border-danger-default);
+      box-shadow: 0 0 0 3px rgba(144, 11, 9, 0.08);
+    }
+
+    .field__error-message {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-danger-default);
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .field__error-message svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ── Disabled state ── */
+    .field--disabled .input {
+      background: var(--sds-color-background-disabled-default);
+      border-color: var(--sds-color-border-disabled-default);
+      cursor: not-allowed;
+    }
+
+    .field--disabled .input input,
+    .field--disabled .input textarea,
+    .field--disabled .input select {
+      color: var(--sds-color-text-disabled-default);
+      cursor: not-allowed;
+    }
+
+    .field--disabled .field__label {
+      color: var(--sds-color-text-disabled-default);
+    }
+
+    /* ── Read only state ── */
+    .field--readonly .input {
+      background: var(--sds-color-background-default-secondary);
+    }
+
+    /* ── Textarea ── */
+    .input--textarea { align-items: flex-start; }
+    .input--textarea textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* ── Select ── */
+    .input--select select {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    /* ── Input sizes ── */
+    .input--sm {
+      padding: var(--sds-size-space-200) var(--sds-size-space-300);
+    }
+    .input--sm input {
+      font-size: var(--sds-typography-body-size-small);
+    }
+
+    /* ── Prefix / Suffix ── */
+    .input__prefix,
+    .input__suffix {
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .input__prefix { margin-right: 2px; }
+    .input__suffix { margin-left: 2px; }
+
+    /* Character counter */
+    .field__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .field__counter {
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-tertiary);
+      margin-left: auto;
+    }
+
+    /* Token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--sds-typography-body-size-small);
+    }
+    .token-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--sds-color-background-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+    }
+    .token-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+      font-family: 'Courier New', monospace;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+
+    .state-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--sds-color-text-default-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="back-link">← Back to Nucleus</a>
+
+  <h1>Input</h1>
+  <p class="page-desc">Input fields allow users to enter text or numeric values. They support labels, descriptions, icons, and validation messages.</p>
+
+  <!-- DEFAULT STATES -->
+  <div class="section">
+    <h2>States</h2>
+    <div class="demo-card">
+      <div class="demo-grid">
+
+        <!-- Default -->
+        <div class="field">
+          <p class="state-label">Default</p>
+          <label class="field__label" for="input-default">Email address</label>
+          <p class="field__description">We'll use this to send you updates.</p>
+          <div class="input">
+            <input id="input-default" type="email" placeholder="you@example.com" />
+          </div>
+        </div>
+
+        <!-- Filled -->
+        <div class="field">
+          <p class="state-label">Filled</p>
+          <label class="field__label" for="input-filled">Full name</label>
+          <p class="field__description">Your legal name as it appears on your ID.</p>
+          <div class="input">
+            <input id="input-filled" type="text" value="Jordan Smith" />
+          </div>
+        </div>
+
+        <!-- Required -->
+        <div class="field">
+          <p class="state-label">Required</p>
+          <label class="field__label" for="input-required">
+            Password <span class="required">*</span>
+          </label>
+          <p class="field__description">Must be at least 8 characters long.</p>
+          <div class="input">
+            <input id="input-required" type="password" placeholder="Enter your password" />
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div class="field field--error">
+          <p class="state-label">Error</p>
+          <label class="field__label" for="input-error">
+            Email address <span class="required">*</span>
+          </label>
+          <p class="field__description">We'll use this to send you updates.</p>
+          <div class="input">
+            <input id="input-error" type="email" value="not-an-email" />
+          </div>
+          <p class="field__error-message">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zm0 3.5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Please enter a valid email address.
+          </p>
+        </div>
+
+        <!-- Disabled -->
+        <div class="field field--disabled">
+          <p class="state-label">Disabled</p>
+          <label class="field__label" for="input-disabled">Username</label>
+          <p class="field__description">Your username cannot be changed.</p>
+          <div class="input">
+            <input id="input-disabled" type="text" value="jsmith_92" disabled />
+          </div>
+        </div>
+
+        <!-- Read only -->
+        <div class="field field--readonly">
+          <p class="state-label">Read Only</p>
+          <label class="field__label" for="input-readonly">Account ID</label>
+          <p class="field__description">Your unique account identifier.</p>
+          <div class="input">
+            <input id="input-readonly" type="text" value="ACC-7842-X" readonly />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- WITH ICONS -->
+  <div class="section">
+    <h2>With Icons</h2>
+    <div class="demo-card">
+      <div class="demo-grid">
+
+        <!-- Leading icon -->
+        <div class="field">
+          <label class="field__label" for="input-search">Search</label>
+          <div class="input">
+            <span class="input__icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10.5 10.5 13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input id="input-search" type="search" placeholder="Search components..." />
+          </div>
+        </div>
+
+        <!-- Trailing icon -->
+        <div class="field">
+          <label class="field__label" for="input-password-icon">Password</label>
+          <div class="input">
+            <input id="input-password-icon" type="password" placeholder="Enter password" />
+            <span class="input__icon" style="cursor: pointer;">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <ellipse cx="8" cy="8" rx="6" ry="4" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- Both icons -->
+        <div class="field">
+          <label class="field__label" for="input-url">Website</label>
+          <div class="input">
+            <span class="input__prefix">https://</span>
+            <input id="input-url" type="text" placeholder="yoursite.com" />
+            <span class="input__icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M13 8.5 8 13.5 3 8.5M8 3.5v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- With prefix -->
+        <div class="field">
+          <label class="field__label" for="input-price">Price</label>
+          <div class="input">
+            <span class="input__prefix">$</span>
+            <input id="input-price" type="number" placeholder="0.00" />
+            <span class="input__suffix">USD</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXTAREA -->
+  <div class="section">
+    <h2>Textarea</h2>
+    <div class="demo-card">
+      <div class="demo-grid">
+
+        <!-- Default textarea -->
+        <div class="field">
+          <label class="field__label" for="textarea-default">Description</label>
+          <p class="field__description">Add a short description of your project.</p>
+          <div class="input input--textarea">
+            <textarea id="textarea-default" placeholder="Write something..." rows="4"></textarea>
+          </div>
+        </div>
+
+        <!-- Textarea with counter -->
+        <div class="field">
+          <label class="field__label" for="textarea-counter">Bio</label>
+          <p class="field__description">Tell people a little about yourself.</p>
+          <div class="input input--textarea">
+            <textarea id="textarea-counter" placeholder="I'm a designer who..." rows="4" maxlength="160"></textarea>
+          </div>
+          <div class="field__meta">
+            <span></span>
+            <span class="field__counter" id="counter-output">0 / 160</span>
+          </div>
+        </div>
+
+        <!-- Error textarea -->
+        <div class="field field--error">
+          <label class="field__label" for="textarea-error">Feedback <span class="required">*</span></label>
+          <div class="input input--textarea">
+            <textarea id="textarea-error" rows="4"></textarea>
+          </div>
+          <p class="field__error-message">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zm0 3.5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            This field is required.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SELECT -->
+  <div class="section">
+    <h2>Select</h2>
+    <div class="demo-card">
+      <div class="demo-grid">
+
+        <div class="field">
+          <label class="field__label" for="select-default">Country</label>
+          <p class="field__description">Select your country of residence.</p>
+          <div class="input input--select">
+            <select id="select-default">
+              <option value="" disabled selected>Choose a country…</option>
+              <option value="us">United States</option>
+              <option value="uk">United Kingdom</option>
+              <option value="ca">Canada</option>
+              <option value="au">Australia</option>
+            </select>
+            <span class="input__icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="field field--disabled">
+          <label class="field__label" for="select-disabled">Plan</label>
+          <p class="field__description">Contact support to change your plan.</p>
+          <div class="input input--select">
+            <select id="select-disabled" disabled>
+              <option>Pro Plan</option>
+            </select>
+            <span class="input__icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="field field--error">
+          <label class="field__label" for="select-error">Category <span class="required">*</span></label>
+          <div class="input input--select">
+            <select id="select-error">
+              <option value="" disabled selected>Choose a category…</option>
+              <option>Design</option>
+              <option>Engineering</option>
+            </select>
+            <span class="input__icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <p class="field__error-message">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zm0 3.5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Please select a category.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SIZE VARIANTS -->
+  <div class="section">
+    <h2>Sizes</h2>
+    <div class="demo-card">
+      <div class="demo-grid">
+
+        <div class="field">
+          <label class="field__label" for="input-size-md">Medium (default)</label>
+          <div class="input">
+            <input id="input-size-md" type="text" placeholder="Medium input" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="input-size-sm">Small</label>
+          <div class="input input--sm">
+            <input id="input-size-sm" type="text" placeholder="Small input" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN TOKENS -->
+  <div class="section">
+    <h2>Design Tokens</h2>
+    <div class="demo-card">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Token</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Background</td><td>--sds-color-background-default-default</td><td>#ffffff</td></tr>
+          <tr><td>Border (Default)</td><td>--sds-color-border-default-default</td><td>#d9d9d9</td></tr>
+          <tr><td>Border (Error)</td><td>--sds-color-border-danger-default</td><td>#900b09</td></tr>
+          <tr><td>Border (Disabled)</td><td>--sds-color-border-disabled-default</td><td>#b3b3b3</td></tr>
+          <tr><td>Background (Disabled)</td><td>--sds-color-background-disabled-default</td><td>#d9d9d9</td></tr>
+          <tr><td>Text Color</td><td>--sds-color-text-default-default</td><td>#1e1e1e</td></tr>
+          <tr><td>Placeholder</td><td>--sds-color-text-default-tertiary</td><td>#b3b3b3</td></tr>
+          <tr><td>Error Text</td><td>--sds-color-text-danger-default</td><td>#900b09</td></tr>
+          <tr><td>Padding H</td><td>--sds-size-padding-lg</td><td>16px</td></tr>
+          <tr><td>Padding V</td><td>--sds-size-padding-md</td><td>12px</td></tr>
+          <tr><td>Border Radius</td><td>--sds-size-radius-200</td><td>8px</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const textarea = document.getElementById('textarea-counter');
+    const counter = document.getElementById('counter-output');
+    if (textarea && counter) {
+      textarea.addEventListener('input', () => {
+        counter.textContent = textarea.value.length + ' / 160';
+      });
+    }
+  </script>
+
+</body>
+</html>

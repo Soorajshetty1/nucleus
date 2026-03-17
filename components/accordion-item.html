@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accordion Item – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      padding: 40px;
+    }
+
+    .back { display: inline-block; margin-bottom: 24px; font-size: 14px; color: var(--sds-color-text-default-secondary); text-decoration: none; }
+    .back:hover { color: var(--sds-color-text-default-default); }
+    h1 { font-size: var(--sds-typography-heading-size-base); font-weight: var(--sds-typography-heading-font-weight); color: var(--sds-color-text-default-default); margin-bottom: 32px; }
+
+    .demo {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sds-size-space-400);
+      width: 640px;
+    }
+
+    .accordion-item {
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: var(--sds-size-padding-lg);
+      cursor: pointer;
+      user-select: none;
+      width: 100%;
+    }
+
+    .accordion-item[data-state="collapsed"] {
+      background: var(--sds-color-background-default-secondary);
+      display: flex;
+      align-items: center;
+    }
+
+    .accordion-item[data-state="expanded"] {
+      background: var(--sds-color-background-default-default);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sds-size-space-200);
+    }
+
+    .accordion-item__header {
+      display: flex;
+      align-items: center;
+      gap: var(--sds-size-space-200);
+      width: 100%;
+    }
+
+    .accordion-item[data-state="collapsed"] .accordion-item__header { flex: 1 0 0; }
+
+    .accordion-item__title {
+      flex: 1 0 0;
+      font-size: var(--sds-typography-body-size-medium);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      line-height: var(--sds-typography-body-line-height);
+      color: var(--sds-color-text-default-default);
+    }
+
+    .accordion-item__chevron {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .accordion-item__chevron svg {
+      width: 12px;
+      height: 8px;
+      stroke: var(--sds-color-icon-default-default);
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .accordion-item__content {
+      font-size: var(--sds-typography-body-size-medium);
+      font-weight: var(--sds-typography-body-font-weight-regular);
+      line-height: var(--sds-typography-body-line-height);
+      color: var(--sds-color-text-default-default);
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <a class="back" href="../index.html">← Back to Nucleus</a>
+  <h1>Accordion Item</h1>
+
+  <div class="demo">
+    <!-- Collapsed state -->
+    <div class="accordion-item" data-state="collapsed" role="button" aria-expanded="false" tabindex="0">
+      <div class="accordion-item__header">
+        <span class="accordion-item__title">Title</span>
+        <div class="accordion-item__chevron" aria-hidden="true">
+          <svg viewBox="0 0 12 8"><polyline points="1,1 6,6 11,1" /></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded state -->
+    <div class="accordion-item" data-state="expanded" role="button" aria-expanded="true" tabindex="0">
+      <div class="accordion-item__header">
+        <span class="accordion-item__title">Title</span>
+        <div class="accordion-item__chevron" aria-hidden="true">
+          <svg viewBox="0 0 12 8"><polyline points="1,6 6,1 11,6" /></svg>
+        </div>
+      </div>
+      <div class="accordion-item__content">
+        Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.accordion-item').forEach((item) => {
+      const toggle = () => {
+        const isExpanded = item.dataset.state === 'expanded';
+        item.dataset.state = isExpanded ? 'collapsed' : 'expanded';
+        item.setAttribute('aria-expanded', String(!isExpanded));
+        const chevron = item.querySelector('.accordion-item__chevron svg');
+        let content = item.querySelector('.accordion-item__content');
+        if (!isExpanded) {
+          chevron.innerHTML = '<polyline points="1,6 6,1 11,6" />';
+          if (!content) {
+            content = document.createElement('div');
+            content.className = 'accordion-item__content';
+            content.textContent = 'Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.';
+            item.appendChild(content);
+          }
+        } else {
+          chevron.innerHTML = '<polyline points="1,1 6,6 11,1" />';
+          if (content) content.remove();
+        }
+      };
+      item.addEventListener('click', toggle);
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+  </script>
+</body>
+</html>

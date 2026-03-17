@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Card – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      color: var(--sds-color-text-default-default);
+      padding: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--sds-color-text-default-default); }
+
+    h1 {
+      font-size: var(--sds-typography-heading-size-base);
+      font-weight: var(--sds-typography-heading-font-weight);
+      letter-spacing: var(--sds-typography-heading-letter-spacing);
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary);
+      margin-bottom: 40px;
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .section { margin-bottom: 48px; }
+
+    h2 {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .demo-bg {
+      background: #ececec;
+      border-radius: var(--sds-size-radius-200);
+      padding: 32px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* ══════════════════════════════════════════
+       CARD BASE
+    ══════════════════════════════════════════ */
+    .card {
+      background: var(--sds-color-background-default-default);
+      border-radius: var(--sds-size-radius-200);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Stroke variant ── */
+    .card--stroke {
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    /* ── Elevated variant ── */
+    .card--elevated {
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10), 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ── Ghost variant ── */
+    .card--ghost {
+      background: transparent;
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      box-shadow: none;
+    }
+
+    /* ── Filled variant ── */
+    .card--filled {
+      background: var(--sds-color-background-default-secondary);
+      border: none;
+      box-shadow: none;
+    }
+
+    /* ── Hover effect ── */
+    .card--interactive {
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card--interactive:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+    }
+
+    /* ══════════════════════════════════════════
+       CARD MEDIA (image / cover)
+    ══════════════════════════════════════════ */
+    .card__media {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .card__media-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+    }
+
+    .card__media-placeholder--a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+    .card__media-placeholder--b { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: #fff; }
+    .card__media-placeholder--c { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #fff; }
+    .card__media-placeholder--d { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #1e1e1e; }
+    .card__media-placeholder--e { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #1e1e1e; }
+    .card__media-placeholder--neutral { background: var(--sds-color-background-neutral-tertiary); }
+
+    /* ══════════════════════════════════════════
+       CARD BODY
+    ══════════════════════════════════════════ */
+    .card__body {
+      padding: var(--sds-size-space-600);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sds-size-space-300);
+    }
+
+    .card__body--sm { padding: var(--sds-size-space-400); }
+
+    .card__eyebrow {
+      font-size: 11px;
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .card__heading {
+      font-size: var(--sds-typography-heading-size-base);
+      font-weight: var(--sds-typography-heading-font-weight);
+      color: var(--sds-color-text-default-default);
+      line-height: var(--sds-typography-heading-line-height);
+      letter-spacing: var(--sds-typography-heading-letter-spacing);
+    }
+
+    .card__subheading {
+      font-size: var(--sds-typography-subheading-size-medium);
+      font-weight: var(--sds-typography-heading-font-weight);
+      color: var(--sds-color-text-default-default);
+      line-height: var(--sds-typography-subheading-line-height);
+    }
+
+    .card__text {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary);
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .card__text--sm {
+      font-size: var(--sds-typography-body-size-small);
+    }
+
+    .card__meta {
+      display: flex;
+      align-items: center;
+      gap: var(--sds-size-space-200);
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-tertiary);
+    }
+
+    .card__meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--sds-color-text-default-tertiary);
+      flex-shrink: 0;
+    }
+
+    .card__spacer { flex: 1; }
+
+    /* ══════════════════════════════════════════
+       CARD FOOTER
+    ══════════════════════════════════════════ */
+    .card__footer {
+      padding: var(--sds-size-space-400) var(--sds-size-space-600);
+      border-top: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sds-size-space-200);
+      flex-wrap: wrap;
+    }
+
+    .card__footer--end {
+      justify-content: flex-end;
+    }
+
+    /* ══════════════════════════════════════════
+       HORIZONTAL CARD LAYOUT
+    ══════════════════════════════════════════ */
+    .card--horizontal {
+      flex-direction: row;
+    }
+
+    .card--horizontal .card__media-placeholder,
+    .card--horizontal .card__media {
+      width: 160px;
+      aspect-ratio: auto;
+      height: auto;
+      flex-shrink: 0;
+    }
+
+    .card--horizontal .card__body {
+      flex: 1;
+    }
+
+    /* ══════════════════════════════════════════
+       BUTTONS (reused)
+    ══════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sds-size-space-200);
+      border-radius: var(--sds-size-radius-200);
+      border: var(--sds-size-stroke-border) solid transparent;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-regular);
+      line-height: 1;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+      padding: var(--sds-size-space-200) var(--sds-size-space-300);
+    }
+
+    .btn--primary {
+      background: var(--sds-color-background-brand-default);
+      border-color: var(--sds-color-border-brand-default);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+    .btn--primary:hover { background: var(--sds-color-background-brand-hover); }
+
+    .btn--neutral {
+      background: var(--sds-color-background-neutral-tertiary);
+      border-color: var(--sds-color-border-neutral-secondary);
+      color: var(--sds-color-text-default-default);
+    }
+    .btn--neutral:hover { background: var(--sds-color-background-neutral-tertiary-hover); }
+
+    .btn--subtle {
+      background: transparent;
+      border-color: transparent;
+      color: var(--sds-color-text-neutral-default);
+    }
+    .btn--subtle:hover {
+      background: var(--sds-color-background-default-secondary);
+      border-color: var(--sds-color-border-default-default);
+    }
+
+    /* Avatar small */
+    .avatar-sm {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    /* Tag small */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: var(--sds-size-radius-full);
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+
+    .tag--positive { background: var(--sds-color-background-positive-secondary); border-color: var(--sds-color-background-positive-default); color: var(--sds-color-text-positive-on-positive-secondary); }
+    .tag--warning  { background: var(--sds-color-background-warning-secondary);  border-color: var(--sds-color-background-warning-default);  color: var(--sds-color-text-warning-on-warning-secondary);  }
+    .tag--danger   { background: var(--sds-color-background-danger-tertiary);    border-color: var(--sds-color-border-danger-default);        color: var(--sds-color-text-danger-default);                }
+    .tag--neutral  { background: var(--sds-color-background-neutral-tertiary);   border-color: var(--sds-color-border-neutral-secondary);     color: var(--sds-color-text-neutral-default);               }
+
+    /* Divider */
+    .card__divider {
+      border: none;
+      border-top: 1px solid var(--sds-color-border-default-default);
+    }
+
+    /* Progress bar */
+    .progress {
+      height: 6px;
+      border-radius: 9999px;
+      background: var(--sds-color-background-neutral-tertiary);
+      overflow: hidden;
+    }
+    .progress__bar {
+      height: 100%;
+      border-radius: 9999px;
+      background: var(--sds-color-background-brand-default);
+      transition: width 0.3s ease;
+    }
+
+    /* Token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--sds-typography-body-size-small);
+    }
+    .token-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--sds-color-background-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+    }
+    .token-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+      font-family: 'Courier New', monospace;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+
+    .demo-card-wrap {
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="back-link">← Back to Nucleus</a>
+
+  <h1>Card</h1>
+  <p class="page-desc">Cards are surfaces that contain content and actions about a single topic. They support various layouts including vertical, horizontal, and different visual styles.</p>
+
+  <!-- STROKE / VERTICAL -->
+  <div class="section">
+    <h2>Stroke – Vertical Layout</h2>
+    <div class="demo-bg">
+      <div class="cards-grid">
+
+        <!-- Basic card -->
+        <div class="card card--stroke">
+          <div class="card__media-placeholder card__media-placeholder--a"></div>
+          <div class="card__body">
+            <p class="card__heading">Getting started with tokens</p>
+            <p class="card__text">Learn how to use design tokens to build consistent interfaces that scale across your entire product.</p>
+            <div class="card__meta">
+              <span>5 min read</span>
+              <span class="card__meta-dot"></span>
+              <span>Beginner</span>
+            </div>
+          </div>
+          <div class="card__footer">
+            <span class="tag tag--positive">Published</span>
+            <button class="btn btn--neutral">Read more</button>
+          </div>
+        </div>
+
+        <!-- Card with eyebrow -->
+        <div class="card card--stroke">
+          <div class="card__media-placeholder card__media-placeholder--b"></div>
+          <div class="card__body">
+            <p class="card__eyebrow">Tutorial</p>
+            <p class="card__heading">Building a component library</p>
+            <p class="card__text">A step-by-step guide to creating reusable components with a design system approach from the ground up.</p>
+            <div class="card__spacer"></div>
+            <div class="card__meta">
+              <span>12 min read</span>
+              <span class="card__meta-dot"></span>
+              <span>Advanced</span>
+            </div>
+          </div>
+          <div class="card__footer">
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn--neutral">Save</button>
+              <button class="btn btn--primary">Read →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card with progress -->
+        <div class="card card--stroke">
+          <div class="card__body">
+            <p class="card__eyebrow">Course progress</p>
+            <p class="card__subheading">Design Systems 101</p>
+            <p class="card__text card__text--sm">Complete 7 of 10 modules to earn your certificate.</p>
+            <div>
+              <div style="display:flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size:12px; color: var(--sds-color-text-default-secondary);">Progress</span>
+                <span style="font-size:12px; font-weight:600; color: var(--sds-color-text-default-default);">70%</span>
+              </div>
+              <div class="progress">
+                <div class="progress__bar" style="width: 70%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card__footer">
+            <button class="btn btn--neutral" style="width:100%;">Continue learning →</button>
+          </div>
+        </div>
+
+        <!-- Interactive card -->
+        <div class="card card--stroke card--interactive" tabindex="0" role="button" aria-label="View component details">
+          <div class="card__media-placeholder card__media-placeholder--c"></div>
+          <div class="card__body">
+            <p class="card__eyebrow">Component</p>
+            <p class="card__heading">Button</p>
+            <p class="card__text">Interactive elements that trigger actions. Supports primary, neutral, and subtle variants with multiple sizes.</p>
+          </div>
+          <div class="card__footer">
+            <span class="tag tag--neutral">3 variants</span>
+            <a href="./button.html" class="btn btn--subtle">View →</a>
+          </div>
+        </div>
+
+        <!-- Compact card -->
+        <div class="card card--stroke">
+          <div class="card__body card__body--sm">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="avatar-sm" style="background: var(--sds-color-background-brand-default); color: var(--sds-color-text-brand-on-brand);">JS</span>
+                <div>
+                  <p style="font-size: 14px; font-weight: 600; color: var(--sds-color-text-default-default);">Jordan Smith</p>
+                  <p style="font-size: 12px; color: var(--sds-color-text-default-secondary);">Senior Designer</p>
+                </div>
+              </div>
+              <span class="tag tag--positive">Active</span>
+            </div>
+            <hr class="card__divider" />
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <p style="font-size: 11px; color: var(--sds-color-text-default-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Projects</p>
+                <p style="font-size: 20px; font-weight: 600; color: var(--sds-color-text-default-default);">24</p>
+              </div>
+              <div>
+                <p style="font-size: 11px; color: var(--sds-color-text-default-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Components</p>
+                <p style="font-size: 20px; font-weight: 600; color: var(--sds-color-text-default-default);">142</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat card -->
+        <div class="card card--stroke">
+          <div class="card__body">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+              <div>
+                <p class="card__eyebrow">Total components</p>
+                <p style="font-size: 40px; font-weight: 600; color: var(--sds-color-text-default-default); line-height: 1.1; margin-top: 4px;">142</p>
+                <p style="font-size: 13px; color: var(--sds-color-text-default-secondary); margin-top: 4px;">↑ 12 added this month</p>
+              </div>
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: var(--sds-color-background-brand-default); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="1.5" y="1.5" width="7" height="7" rx="1.5" stroke="#f5f5f5" stroke-width="1.5"/>
+                  <rect x="13.5" y="1.5" width="7" height="7" rx="1.5" stroke="#f5f5f5" stroke-width="1.5"/>
+                  <rect x="1.5" y="13.5" width="7" height="7" rx="1.5" stroke="#f5f5f5" stroke-width="1.5"/>
+                  <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" stroke="#f5f5f5" stroke-width="1.5"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- HORIZONTAL LAYOUT -->
+  <div class="section">
+    <h2>Stroke – Horizontal Layout</h2>
+    <div class="demo-bg">
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 680px;">
+
+        <div class="card card--stroke card--horizontal">
+          <div class="card__media-placeholder card__media-placeholder--d" style="min-height: 120px;"></div>
+          <div class="card__body">
+            <p class="card__eyebrow">Design</p>
+            <p class="card__subheading">Color theory fundamentals</p>
+            <p class="card__text card__text--sm">Understand hue, saturation, and lightness to build effective color systems.</p>
+            <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 8px;">
+              <button class="btn btn--neutral">Save</button>
+              <button class="btn btn--primary">Read →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--stroke card--horizontal">
+          <div class="card__media-placeholder card__media-placeholder--e" style="min-height: 120px;"></div>
+          <div class="card__body">
+            <p class="card__eyebrow">Engineering</p>
+            <p class="card__subheading">CSS custom properties</p>
+            <p class="card__text card__text--sm">How to use CSS variables to build a scalable theming system for your components.</p>
+            <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 8px;">
+              <button class="btn btn--neutral">Save</button>
+              <button class="btn btn--primary">Read →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--stroke card--horizontal">
+          <div class="card__media-placeholder card__media-placeholder--neutral" style="min-height: 100px; width: 80px;">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 24V10a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14" stroke="#767676" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M5 24h22" stroke="#767676" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M13 16h6M13 12h6M13 20h3" stroke="#767676" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <p class="card__subheading" style="font-size: 16px;">Q3 Design Report.pdf</p>
+              <span class="tag tag--neutral" style="font-size: 11px; flex-shrink: 0;">2.4 MB</span>
+            </div>
+            <p class="card__text card__text--sm">Updated March 12, 2026 · Shared with 4 people</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEVATED -->
+  <div class="section">
+    <h2>Elevated</h2>
+    <div class="demo-bg">
+      <div class="cards-grid">
+        <div class="card card--elevated">
+          <div class="card__media-placeholder card__media-placeholder--a"></div>
+          <div class="card__body">
+            <p class="card__heading">Elevated card</p>
+            <p class="card__text">Uses a deeper shadow instead of a border to create visual elevation.</p>
+          </div>
+          <div class="card__footer card__footer--end">
+            <button class="btn btn--neutral">Learn more</button>
+          </div>
+        </div>
+
+        <div class="card card--elevated card--interactive">
+          <div class="card__body">
+            <p class="card__eyebrow">Interactive</p>
+            <p class="card__heading">Hover me</p>
+            <p class="card__text">This card lifts on hover with an increased shadow and upward translation.</p>
+          </div>
+          <div class="card__footer card__footer--end">
+            <button class="btn btn--primary">Explore →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILLED -->
+  <div class="section">
+    <h2>Filled</h2>
+    <div class="demo-bg">
+      <div class="cards-grid">
+        <div class="card card--filled">
+          <div class="card__body">
+            <p class="card__heading">Filled card</p>
+            <p class="card__text">Uses a light gray background instead of white. Good for secondary content areas.</p>
+          </div>
+          <div class="card__footer card__footer--end">
+            <button class="btn btn--neutral">Dismiss</button>
+            <button class="btn btn--primary">Action</button>
+          </div>
+        </div>
+
+        <div class="card card--filled">
+          <div class="card__body">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: var(--sds-color-background-brand-default); display: flex; align-items: center; justify-content: center; margin-bottom: 4px;">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zm0 4v4l3 3" stroke="#f5f5f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="card__heading" style="font-size: 20px;">Timeline</p>
+            <p class="card__text">Track events and milestones in a chronological view.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GHOST -->
+  <div class="section">
+    <h2>Ghost</h2>
+    <div class="demo-bg">
+      <div class="cards-grid">
+        <div class="card card--ghost">
+          <div class="card__body">
+            <p class="card__heading">Ghost card</p>
+            <p class="card__text">Transparent background with a subtle border. Blends with any background color.</p>
+          </div>
+          <div class="card__footer card__footer--end">
+            <button class="btn btn--subtle">View details</button>
+          </div>
+        </div>
+
+        <div class="card card--ghost card--interactive" tabindex="0">
+          <div class="card__body" style="align-items: center; text-align: center; padding: 40px 24px;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; border: 2px dashed var(--sds-color-border-default-default); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12 5v14M5 12h14" stroke="var(--sds-color-text-default-secondary)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p style="font-size: 14px; font-weight: 600; color: var(--sds-color-text-default-default);">Add new component</p>
+            <p style="font-size: 13px; color: var(--sds-color-text-default-secondary); margin-top: 4px;">Click to create a new component entry.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN TOKENS -->
+  <div class="section">
+    <h2>Design Tokens</h2>
+    <div class="demo-card-wrap">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Token</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Background</td><td>--sds-color-background-default-default</td><td>#ffffff</td></tr>
+          <tr><td>Border (Stroke)</td><td>--sds-color-border-default-default</td><td>#d9d9d9</td></tr>
+          <tr><td>Border Width</td><td>--sds-size-stroke-border</td><td>1px</td></tr>
+          <tr><td>Border Radius</td><td>--sds-size-radius-200</td><td>8px</td></tr>
+          <tr><td>Padding</td><td>--sds-size-space-600</td><td>24px</td></tr>
+          <tr><td>Padding (compact)</td><td>--sds-size-space-400</td><td>16px</td></tr>
+          <tr><td>Heading Size</td><td>--sds-typography-heading-size-base</td><td>24px</td></tr>
+          <tr><td>Heading Weight</td><td>--sds-typography-heading-font-weight</td><td>600</td></tr>
+          <tr><td>Body text</td><td>--sds-typography-body-size-medium</td><td>16px</td></tr>
+          <tr><td>Body color</td><td>--sds-color-text-default-secondary</td><td>#757575</td></tr>
+          <tr><td>BG (Filled)</td><td>--sds-color-background-default-secondary</td><td>#f5f5f5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

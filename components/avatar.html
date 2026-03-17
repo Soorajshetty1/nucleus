@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avatar – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      color: var(--sds-color-text-default-default);
+      padding: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--sds-color-text-default-default); }
+
+    h1 {
+      font-size: var(--sds-typography-heading-size-base);
+      font-weight: var(--sds-typography-heading-font-weight);
+      letter-spacing: var(--sds-typography-heading-letter-spacing);
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary);
+      margin-bottom: 40px;
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .section { margin-bottom: 48px; }
+
+    h2 {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .demo-card {
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 32px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .row:last-child { margin-bottom: 0; }
+
+    .row-label {
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════
+       AVATAR BASE
+    ══════════════════════════════════════════ */
+    .avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* ── Sizes ── */
+    .avatar--xl {
+      width: 56px;
+      height: 56px;
+      font-size: 22px;
+    }
+
+    .avatar--lg {
+      width: var(--sds-size-icon-large);   /* 40px */
+      height: var(--sds-size-icon-large);
+      font-size: 16px;
+    }
+
+    .avatar--md {
+      width: var(--sds-size-icon-medium);  /* 32px */
+      height: var(--sds-size-icon-medium);
+      font-size: 13px;
+    }
+
+    .avatar--sm {
+      width: var(--sds-size-icon-small);   /* 24px */
+      height: var(--sds-size-icon-small);
+      font-size: 10px;
+    }
+
+    /* ── Shapes ── */
+    .avatar--circle { border-radius: var(--sds-size-radius-full); }
+    .avatar--square { border-radius: var(--sds-size-radius-200); }
+    .avatar--square.avatar--sm { border-radius: var(--sds-size-radius-100); }
+
+    /* ── Image type ── */
+    .avatar--image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Initial type ── */
+    .avatar--initial {
+      background: var(--sds-color-background-brand-default);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+
+    /* ── Color variants for initials ── */
+    .avatar--slate   { background: #64748b; color: #fff; }
+    .avatar--indigo  { background: #4f46e5; color: #fff; }
+    .avatar--teal    { background: #0d9488; color: #fff; }
+    .avatar--rose    { background: #e11d48; color: #fff; }
+    .avatar--amber   { background: #d97706; color: #fff; }
+    .avatar--dark    { background: var(--sds-color-background-brand-default); color: var(--sds-color-text-brand-on-brand); }
+
+    /* ── Image gradient placeholder ── */
+    .avatar--gradient-a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+    .avatar--gradient-b { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: #fff; }
+    .avatar--gradient-c { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #fff; }
+    .avatar--gradient-d { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #1e1e1e; }
+    .avatar--gradient-e { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #1e1e1e; }
+
+    /* Icon in avatar */
+    .avatar--icon svg {
+      width: 55%;
+      height: 55%;
+      flex-shrink: 0;
+    }
+
+    /* ── Online indicator ── */
+    .avatar-wrapper {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .avatar-status {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 2px solid var(--sds-color-background-default-default);
+    }
+
+    .avatar--lg + .avatar-status,
+    .avatar-wrapper .avatar--lg ~ .avatar-status {
+      width: 12px;
+      height: 12px;
+    }
+
+    .avatar--xl + .avatar-status,
+    .avatar-wrapper .avatar--xl ~ .avatar-status {
+      width: 14px;
+      height: 14px;
+    }
+
+    .avatar-status--online  { background: var(--sds-color-background-positive-default); }
+    .avatar-status--offline { background: var(--sds-color-background-default-tertiary); }
+    .avatar-status--away    { background: var(--sds-color-background-warning-default); }
+    .avatar-status--busy    { background: var(--sds-color-background-danger-default); }
+
+    /* ── Avatar group (stacked) ── */
+    .avatar-group {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .avatar-group .avatar {
+      border: 2px solid var(--sds-color-background-default-default);
+      margin-left: -8px;
+      transition: transform 0.15s ease;
+    }
+    .avatar-group .avatar:first-child { margin-left: 0; }
+    .avatar-group .avatar:hover { transform: translateY(-2px); z-index: 1; }
+
+    .avatar-group__overflow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--sds-size-radius-full);
+      background: var(--sds-color-background-neutral-tertiary);
+      color: var(--sds-color-text-neutral-default);
+      border: 2px solid var(--sds-color-background-default-default);
+      margin-left: -8px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Avatar with label ── */
+    .avatar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-item__info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .avatar-item__name {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-default);
+    }
+
+    .avatar-item__role {
+      font-size: 12px;
+      color: var(--sds-color-text-default-secondary);
+    }
+
+    /* Token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--sds-typography-body-size-small);
+    }
+    .token-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--sds-color-background-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+    }
+    .token-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+      font-family: 'Courier New', monospace;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="back-link">← Back to Nucleus</a>
+
+  <h1>Avatar</h1>
+  <p class="page-desc">Avatars represent a user or entity. They can display an image, initials, or an icon, and come in circle and square shapes across four sizes.</p>
+
+  <!-- CIRCLE SHAPE -->
+  <div class="section">
+    <h2>Circle – Initials</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Extra Large</span>
+        <span class="avatar avatar--xl avatar--circle avatar--dark">JS</span>
+        <span class="avatar avatar--xl avatar--circle avatar--indigo">AK</span>
+        <span class="avatar avatar--xl avatar--circle avatar--teal">MR</span>
+        <span class="avatar avatar--xl avatar--circle avatar--rose">PL</span>
+        <span class="avatar avatar--xl avatar--circle avatar--amber">TD</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Large (40px)</span>
+        <span class="avatar avatar--lg avatar--circle avatar--dark">JS</span>
+        <span class="avatar avatar--lg avatar--circle avatar--indigo">AK</span>
+        <span class="avatar avatar--lg avatar--circle avatar--teal">MR</span>
+        <span class="avatar avatar--lg avatar--circle avatar--rose">PL</span>
+        <span class="avatar avatar--lg avatar--circle avatar--amber">TD</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Medium (32px)</span>
+        <span class="avatar avatar--md avatar--circle avatar--dark">JS</span>
+        <span class="avatar avatar--md avatar--circle avatar--indigo">AK</span>
+        <span class="avatar avatar--md avatar--circle avatar--teal">MR</span>
+        <span class="avatar avatar--md avatar--circle avatar--rose">PL</span>
+        <span class="avatar avatar--md avatar--circle avatar--amber">TD</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Small (24px)</span>
+        <span class="avatar avatar--sm avatar--circle avatar--dark">J</span>
+        <span class="avatar avatar--sm avatar--circle avatar--indigo">A</span>
+        <span class="avatar avatar--sm avatar--circle avatar--teal">M</span>
+        <span class="avatar avatar--sm avatar--circle avatar--rose">P</span>
+        <span class="avatar avatar--sm avatar--circle avatar--amber">T</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SQUARE SHAPE -->
+  <div class="section">
+    <h2>Square – Initials</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Extra Large</span>
+        <span class="avatar avatar--xl avatar--square avatar--dark">JS</span>
+        <span class="avatar avatar--xl avatar--square avatar--indigo">AK</span>
+        <span class="avatar avatar--xl avatar--square avatar--teal">MR</span>
+        <span class="avatar avatar--xl avatar--square avatar--rose">PL</span>
+        <span class="avatar avatar--xl avatar--square avatar--amber">TD</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Large (40px)</span>
+        <span class="avatar avatar--lg avatar--square avatar--dark">JS</span>
+        <span class="avatar avatar--lg avatar--square avatar--indigo">AK</span>
+        <span class="avatar avatar--lg avatar--square avatar--teal">MR</span>
+        <span class="avatar avatar--lg avatar--square avatar--rose">PL</span>
+        <span class="avatar avatar--lg avatar--square avatar--amber">TD</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Medium (32px)</span>
+        <span class="avatar avatar--md avatar--square avatar--dark">JS</span>
+        <span class="avatar avatar--md avatar--square avatar--indigo">AK</span>
+        <span class="avatar avatar--md avatar--square avatar--teal">MR</span>
+        <span class="avatar avatar--md avatar--square avatar--rose">PL</span>
+        <span class="avatar avatar--md avatar--square avatar--amber">TD</span>
+      </div>
+      <div class="row">
+        <span class="row-label">Small (24px)</span>
+        <span class="avatar avatar--sm avatar--square avatar--dark">J</span>
+        <span class="avatar avatar--sm avatar--square avatar--indigo">A</span>
+        <span class="avatar avatar--sm avatar--square avatar--teal">M</span>
+        <span class="avatar avatar--sm avatar--square avatar--rose">P</span>
+        <span class="avatar avatar--sm avatar--square avatar--amber">T</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGE TYPE -->
+  <div class="section">
+    <h2>Image (gradient placeholder)</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Extra Large</span>
+        <span class="avatar avatar--xl avatar--circle avatar--image avatar--gradient-a" aria-label="User avatar"></span>
+        <span class="avatar avatar--xl avatar--circle avatar--image avatar--gradient-b" aria-label="User avatar"></span>
+        <span class="avatar avatar--xl avatar--circle avatar--image avatar--gradient-c" aria-label="User avatar"></span>
+        <span class="avatar avatar--xl avatar--square avatar--image avatar--gradient-d" aria-label="User avatar"></span>
+        <span class="avatar avatar--xl avatar--square avatar--image avatar--gradient-e" aria-label="User avatar"></span>
+      </div>
+      <div class="row">
+        <span class="row-label">Large</span>
+        <span class="avatar avatar--lg avatar--circle avatar--image avatar--gradient-a" aria-label="User avatar"></span>
+        <span class="avatar avatar--lg avatar--circle avatar--image avatar--gradient-b" aria-label="User avatar"></span>
+        <span class="avatar avatar--lg avatar--circle avatar--image avatar--gradient-c" aria-label="User avatar"></span>
+        <span class="avatar avatar--lg avatar--square avatar--image avatar--gradient-d" aria-label="User avatar"></span>
+        <span class="avatar avatar--lg avatar--square avatar--image avatar--gradient-e" aria-label="User avatar"></span>
+      </div>
+      <div class="row">
+        <span class="row-label">Medium</span>
+        <span class="avatar avatar--md avatar--circle avatar--image avatar--gradient-a" aria-label="User avatar"></span>
+        <span class="avatar avatar--md avatar--circle avatar--image avatar--gradient-b" aria-label="User avatar"></span>
+        <span class="avatar avatar--md avatar--circle avatar--image avatar--gradient-c" aria-label="User avatar"></span>
+        <span class="avatar avatar--md avatar--square avatar--image avatar--gradient-d" aria-label="User avatar"></span>
+        <span class="avatar avatar--md avatar--square avatar--image avatar--gradient-e" aria-label="User avatar"></span>
+      </div>
+      <div class="row">
+        <span class="row-label">Small</span>
+        <span class="avatar avatar--sm avatar--circle avatar--image avatar--gradient-a" aria-label="User avatar"></span>
+        <span class="avatar avatar--sm avatar--circle avatar--image avatar--gradient-b" aria-label="User avatar"></span>
+        <span class="avatar avatar--sm avatar--circle avatar--image avatar--gradient-c" aria-label="User avatar"></span>
+        <span class="avatar avatar--sm avatar--square avatar--image avatar--gradient-d" aria-label="User avatar"></span>
+        <span class="avatar avatar--sm avatar--square avatar--image avatar--gradient-e" aria-label="User avatar"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ICON TYPE -->
+  <div class="section">
+    <h2>Icon Type</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">User icon</span>
+        <span class="avatar avatar--xl avatar--circle avatar--icon avatar--dark" aria-label="User">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="avatar avatar--lg avatar--circle avatar--icon avatar--dark" aria-label="User">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="avatar avatar--md avatar--circle avatar--icon avatar--slate" aria-label="User">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="avatar avatar--sm avatar--circle avatar--icon avatar--slate" aria-label="User">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WITH STATUS -->
+  <div class="section">
+    <h2>With Status Indicator</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">Online</span>
+        <span class="avatar-wrapper">
+          <span class="avatar avatar--xl avatar--circle avatar--dark">JS</span>
+          <span class="avatar-status avatar-status--online" title="Online"></span>
+        </span>
+        <span class="avatar-wrapper">
+          <span class="avatar avatar--lg avatar--circle avatar--indigo">AK</span>
+          <span class="avatar-status avatar-status--online" title="Online"></span>
+        </span>
+        <span class="avatar-wrapper">
+          <span class="avatar avatar--md avatar--circle avatar--teal">MR</span>
+          <span class="avatar-status avatar-status--online" title="Online"></span>
+        </span>
+        <span class="avatar-wrapper">
+          <span class="avatar avatar--sm avatar--circle avatar--rose">P</span>
+          <span class="avatar-status avatar-status--online" title="Online"></span>
+        </span>
+      </div>
+      <div class="row">
+        <span class="row-label">Away</span>
+        <span class="avatar-wrapper">
+          <span class="avatar avatar--lg avatar--circle avatar--amber">TD</span>
+          <span class="avatar-status avatar-status--away" title="Away"></span>
+        </span>
+        <span class="avatar-wrapper">
+          <span class="avatar avatar--lg avatar--circle avatar--slate">BG</span>
+          <span class="avatar-status avatar-status--busy" title="Busy"></span>
+        </span>
+        <span class="avatar-wrapper">
+          <span class="avatar avatar--lg avatar--circle avatar--image avatar--gradient-b"></span>
+          <span class="avatar-status avatar-status--offline" title="Offline"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AVATAR GROUP -->
+  <div class="section">
+    <h2>Avatar Group (Stacked)</h2>
+    <div class="demo-card">
+      <div class="row">
+        <span class="row-label">4 members</span>
+        <div class="avatar-group">
+          <span class="avatar avatar--md avatar--circle avatar--dark">JS</span>
+          <span class="avatar avatar--md avatar--circle avatar--indigo">AK</span>
+          <span class="avatar avatar--md avatar--circle avatar--teal">MR</span>
+          <span class="avatar avatar--md avatar--circle avatar--rose">PL</span>
+        </div>
+      </div>
+      <div class="row">
+        <span class="row-label">+3 overflow</span>
+        <div class="avatar-group">
+          <span class="avatar avatar--md avatar--circle avatar--dark">JS</span>
+          <span class="avatar avatar--md avatar--circle avatar--indigo">AK</span>
+          <span class="avatar avatar--md avatar--circle avatar--teal">MR</span>
+          <span class="avatar avatar--md avatar--circle avatar--rose">PL</span>
+          <span class="avatar avatar--md avatar--circle avatar-group__overflow">+3</span>
+        </div>
+      </div>
+      <div class="row">
+        <span class="row-label">Large group</span>
+        <div class="avatar-group">
+          <span class="avatar avatar--lg avatar--circle avatar--dark">JS</span>
+          <span class="avatar avatar--lg avatar--circle avatar--gradient-a"></span>
+          <span class="avatar avatar--lg avatar--circle avatar--gradient-b"></span>
+          <span class="avatar avatar--lg avatar--circle avatar--amber">TD</span>
+          <span class="avatar avatar--lg avatar--circle avatar-group__overflow" style="width:40px;height:40px;font-size:13px;">+8</span>
+        </div>
+      </div>
+      <div class="row">
+        <span class="row-label">Small group</span>
+        <div class="avatar-group">
+          <span class="avatar avatar--sm avatar--circle avatar--dark">J</span>
+          <span class="avatar avatar--sm avatar--circle avatar--indigo">A</span>
+          <span class="avatar avatar--sm avatar--circle avatar--teal">M</span>
+          <span class="avatar avatar--sm avatar--circle avatar-group__overflow" style="width:24px;height:24px;font-size:9px;">+5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WITH LABEL -->
+  <div class="section">
+    <h2>With Label</h2>
+    <div class="demo-card">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="avatar-item">
+          <div class="avatar-wrapper">
+            <span class="avatar avatar--lg avatar--circle avatar--dark">JS</span>
+            <span class="avatar-status avatar-status--online"></span>
+          </div>
+          <div class="avatar-item__info">
+            <span class="avatar-item__name">Jordan Smith</span>
+            <span class="avatar-item__role">Senior Designer · Online</span>
+          </div>
+        </div>
+        <div class="avatar-item">
+          <div class="avatar-wrapper">
+            <span class="avatar avatar--lg avatar--circle avatar--indigo">AK</span>
+            <span class="avatar-status avatar-status--away"></span>
+          </div>
+          <div class="avatar-item__info">
+            <span class="avatar-item__name">Alex Kim</span>
+            <span class="avatar-item__role">Product Manager · Away</span>
+          </div>
+        </div>
+        <div class="avatar-item">
+          <div class="avatar-wrapper">
+            <span class="avatar avatar--lg avatar--circle avatar--gradient-c"></span>
+            <span class="avatar-status avatar-status--offline"></span>
+          </div>
+          <div class="avatar-item__info">
+            <span class="avatar-item__name">Morgan Reed</span>
+            <span class="avatar-item__role">Engineer · Offline</span>
+          </div>
+        </div>
+        <div class="avatar-item">
+          <span class="avatar avatar--md avatar--circle avatar--teal">MR</span>
+          <div class="avatar-item__info">
+            <span class="avatar-item__name">Mia Reyes</span>
+            <span class="avatar-item__role">Designer</span>
+          </div>
+        </div>
+        <div class="avatar-item">
+          <span class="avatar avatar--sm avatar--circle avatar--rose">P</span>
+          <div class="avatar-item__info">
+            <span class="avatar-item__name">Parker Lee</span>
+            <span class="avatar-item__role">QA Engineer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN TOKENS -->
+  <div class="section">
+    <h2>Design Tokens</h2>
+    <div class="demo-card" style="padding: 0; overflow: hidden;">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Token</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Size – Large</td><td>--sds-size-icon-large</td><td>40px</td></tr>
+          <tr><td>Size – Medium</td><td>--sds-size-icon-medium</td><td>32px</td></tr>
+          <tr><td>Size – Small</td><td>--sds-size-icon-small</td><td>24px</td></tr>
+          <tr><td>Shape – Circle</td><td>--sds-size-radius-full</td><td>9999px</td></tr>
+          <tr><td>Shape – Square</td><td>--sds-size-radius-200</td><td>8px</td></tr>
+          <tr><td>BG (Initial dark)</td><td>--sds-color-background-brand-default</td><td>#2c2c2c</td></tr>
+          <tr><td>Text (on dark)</td><td>--sds-color-text-brand-on-brand</td><td>#f5f5f5</td></tr>
+          <tr><td>Status – Online</td><td>--sds-color-background-positive-default</td><td>#14ae5c</td></tr>
+          <tr><td>Status – Away</td><td>--sds-color-background-warning-default</td><td>#e8b931</td></tr>
+          <tr><td>Status – Busy</td><td>--sds-color-background-danger-default</td><td>#ec221f</td></tr>
+          <tr><td>Status – Offline</td><td>--sds-color-background-default-tertiary</td><td>#d9d9d9</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

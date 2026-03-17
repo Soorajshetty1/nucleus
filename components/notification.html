@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notification – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      color: var(--sds-color-text-default-default);
+      padding: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--sds-color-text-default-default); }
+
+    h1 {
+      font-size: var(--sds-typography-heading-size-base);
+      font-weight: var(--sds-typography-heading-font-weight);
+      letter-spacing: var(--sds-typography-heading-letter-spacing);
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary);
+      margin-bottom: 40px;
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .section { margin-bottom: 48px; }
+
+    h2 {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .demo-card {
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ══════════════════════════════════════════
+       NOTIFICATION BASE
+    ══════════════════════════════════════════ */
+    .notif {
+      display: flex;
+      gap: var(--sds-size-space-300);
+      padding: var(--sds-size-space-400);
+      border-radius: var(--sds-size-radius-200);
+      border: var(--sds-size-stroke-border) solid transparent;
+      position: relative;
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .notif__icon-col {
+      display: flex;
+      align-items: flex-start;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .notif__icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notif__icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .notif__body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .notif__title {
+      font-size: var(--sds-typography-body-size-medium);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      margin-bottom: 4px;
+    }
+
+    .notif__message {
+      font-size: var(--sds-typography-body-size-small);
+      line-height: var(--sds-typography-body-line-height);
+      margin-bottom: 12px;
+    }
+
+    .notif__message:last-child { margin-bottom: 0; }
+
+    .notif__actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .notif__dismiss {
+      position: absolute;
+      top: var(--sds-size-space-300);
+      right: var(--sds-size-space-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--sds-size-radius-100);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      color: inherit;
+      opacity: 0.5;
+      transition: opacity 0.1s, background 0.1s;
+    }
+
+    .notif__dismiss:hover {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.06);
+    }
+
+    .notif__dismiss svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ── CTA / Action button inside notification ── */
+    .notif__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 14px;
+      border-radius: var(--sds-size-radius-100);
+      border: var(--sds-size-stroke-border) solid transparent;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      cursor: pointer;
+      text-decoration: none;
+      line-height: 1;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    /* ══════════════════════════════════════════
+       MESSAGE (Info) VARIANT
+    ══════════════════════════════════════════ */
+    .notif--message {
+      background: var(--sds-color-background-default-default);
+      border-color: var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .notif--message .notif__icon { color: var(--sds-color-text-default-secondary); }
+    .notif--message .notif__message { color: var(--sds-color-text-default-secondary); }
+
+    .notif--message .notif__btn--primary {
+      background: var(--sds-color-background-brand-default);
+      border-color: var(--sds-color-border-brand-default);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+    .notif--message .notif__btn--primary:hover {
+      background: var(--sds-color-background-brand-hover);
+    }
+
+    .notif--message .notif__btn--ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--sds-color-text-default-secondary);
+    }
+    .notif--message .notif__btn--ghost:hover {
+      background: var(--sds-color-background-default-secondary);
+      border-color: var(--sds-color-border-default-default);
+    }
+
+    /* ══════════════════════════════════════════
+       ALERT VARIANTS
+    ══════════════════════════════════════════ */
+
+    /* Danger */
+    .notif--danger {
+      background: var(--sds-color-background-danger-tertiary);
+      border-color: var(--sds-color-border-danger-tertiary);
+      color: var(--sds-color-text-danger-default);
+    }
+
+    .notif--danger .notif__icon { color: var(--sds-color-text-danger-default); }
+    .notif--danger .notif__message { color: var(--sds-color-text-danger-on-danger-secondary); }
+    .notif--danger .notif__title { color: var(--sds-color-text-danger-default); }
+
+    .notif--danger .notif__btn--primary {
+      background: var(--sds-color-background-danger-default);
+      border-color: var(--sds-color-background-danger-default);
+      color: var(--sds-color-text-danger-on-danger);
+    }
+    .notif--danger .notif__btn--primary:hover {
+      background: var(--sds-color-background-danger-hover);
+    }
+
+    .notif--danger .notif__btn--ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--sds-color-text-danger-default);
+    }
+    .notif--danger .notif__btn--ghost:hover {
+      background: var(--sds-color-background-danger-secondary);
+      border-color: var(--sds-color-border-danger-default);
+    }
+
+    /* Positive */
+    .notif--positive {
+      background: var(--sds-color-background-positive-secondary);
+      border-color: var(--sds-color-background-positive-default);
+      color: var(--sds-color-text-positive-on-positive-secondary);
+    }
+
+    .notif--positive .notif__icon { color: var(--sds-color-background-positive-default); }
+    .notif--positive .notif__message { color: var(--sds-color-text-positive-on-positive-secondary); }
+    .notif--positive .notif__title { color: var(--sds-color-text-positive-on-positive-secondary); }
+
+    .notif--positive .notif__btn--primary {
+      background: var(--sds-color-background-positive-default);
+      border-color: var(--sds-color-background-positive-default);
+      color: var(--sds-color-text-positive-on-positive);
+    }
+    .notif--positive .notif__btn--primary:hover {
+      background: var(--sds-color-background-positive-hover);
+    }
+
+    .notif--positive .notif__btn--ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--sds-color-text-positive-on-positive-secondary);
+    }
+
+    /* Warning */
+    .notif--warning {
+      background: var(--sds-color-background-warning-secondary);
+      border-color: var(--sds-color-background-warning-default);
+      color: var(--sds-color-text-warning-on-warning);
+    }
+
+    .notif--warning .notif__icon { color: var(--sds-color-background-warning-hover); }
+    .notif--warning .notif__message { color: var(--sds-color-text-warning-on-warning-secondary); }
+    .notif--warning .notif__title { color: var(--sds-color-text-warning-on-warning); }
+
+    .notif--warning .notif__btn--primary {
+      background: var(--sds-color-background-warning-default);
+      border-color: var(--sds-color-background-warning-default);
+      color: var(--sds-color-text-warning-on-warning);
+    }
+    .notif--warning .notif__btn--primary:hover {
+      background: var(--sds-color-background-warning-hover);
+    }
+
+    .notif--warning .notif__btn--ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--sds-color-text-warning-on-warning-secondary);
+    }
+
+    /* ══════════════════════════════════════════
+       TOAST (fixed bottom-right)
+    ══════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .toast-container .notif {
+      pointer-events: auto;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ── Toast trigger ── */
+    .toast-trigger-area {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: var(--sds-size-space-300) var(--sds-size-space-400);
+      border-radius: var(--sds-size-radius-200);
+      border: 1px solid transparent;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-regular);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn--neutral {
+      background: var(--sds-color-background-neutral-tertiary);
+      border-color: var(--sds-color-border-neutral-secondary);
+      color: var(--sds-color-text-default-default);
+    }
+    .btn--neutral:hover { background: var(--sds-color-background-neutral-tertiary-hover); }
+
+    /* Token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--sds-typography-body-size-small);
+    }
+    .token-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--sds-color-background-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+    }
+    .token-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+      font-family: 'Courier New', monospace;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+
+    /* Divider */
+    .divider-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--sds-color-text-default-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="back-link">← Back to Nucleus</a>
+
+  <h1>Notification</h1>
+  <p class="page-desc">Notifications inform users about important events, confirmations, errors, or warnings. They come in message (toast) and alert (inline) variants.</p>
+
+  <!-- MESSAGE VARIANT -->
+  <div class="section">
+    <h2>Message – Info</h2>
+    <div class="demo-card">
+
+      <!-- Title only -->
+      <p class="divider-label">Title only</p>
+      <div class="notif notif--message" role="status">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 9v5M10 7.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Your session is about to expire.</p>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Title + body -->
+      <p class="divider-label">Title + body</p>
+      <div class="notif notif--message" role="status">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 9v5M10 7.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">New update available</p>
+          <p class="notif__message">Version 3.4.1 includes performance improvements and bug fixes. Refresh to apply.</p>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- With CTA -->
+      <p class="divider-label">With CTA button</p>
+      <div class="notif notif--message" role="status">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 9v5M10 7.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Your export is ready</p>
+          <p class="notif__message">Your CSV file has been generated and is ready to download. This link will expire in 24 hours.</p>
+          <div class="notif__actions">
+            <button class="notif__btn notif__btn--primary">Download file</button>
+            <button class="notif__btn notif__btn--ghost">Dismiss</button>
+          </div>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ALERT VARIANTS -->
+  <div class="section">
+    <h2>Alert – Danger</h2>
+    <div class="demo-card">
+
+      <div class="notif notif--danger" role="alert">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 2L1.5 17.5h17L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M10 9v4M10 15v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Your account is suspended</p>
+          <p class="notif__message">Access has been restricted due to a billing issue. Please update your payment method to restore access.</p>
+          <div class="notif__actions">
+            <button class="notif__btn notif__btn--primary">Update billing</button>
+            <button class="notif__btn notif__btn--ghost">Contact support</button>
+          </div>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Danger minimal -->
+      <div class="notif notif--danger" role="alert">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 2L1.5 17.5h17L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M10 9v4M10 15v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Failed to save changes. Please try again.</p>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Alert – Positive</h2>
+    <div class="demo-card">
+
+      <div class="notif notif--positive" role="status">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Payment successful</p>
+          <p class="notif__message">Your subscription has been activated. You now have access to all Pro features.</p>
+          <div class="notif__actions">
+            <button class="notif__btn notif__btn--primary">Explore features</button>
+            <button class="notif__btn notif__btn--ghost">Dismiss</button>
+          </div>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="notif notif--positive" role="status">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Profile updated successfully.</p>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Alert – Warning</h2>
+    <div class="demo-card">
+
+      <div class="notif notif--warning" role="alert">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 2L1.5 17.5h17L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M10 9v4M10 15v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Your trial ends in 3 days</p>
+          <p class="notif__message">Upgrade to a paid plan to keep access to all your projects and data after the trial period ends.</p>
+          <div class="notif__actions">
+            <button class="notif__btn notif__btn--primary">Upgrade plan</button>
+            <button class="notif__btn notif__btn--ghost">Remind me later</button>
+          </div>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="notif notif--warning" role="alert">
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 2L1.5 17.5h17L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M10 9v4M10 15v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">Storage is almost full. You are at 90% capacity.</p>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST DEMO -->
+  <div class="section">
+    <h2>Toast (interactive demo)</h2>
+    <div class="demo-card" style="flex-direction: row; gap: 12px; flex-wrap: wrap;">
+      <p style="width: 100%; font-size: var(--sds-typography-body-size-small); color: var(--sds-color-text-default-secondary); margin-bottom: 4px;">Click a button to show a toast notification in the bottom-right corner.</p>
+      <button class="btn btn--neutral" onclick="showToast('info')">Info toast</button>
+      <button class="btn btn--neutral" onclick="showToast('success')">Success toast</button>
+      <button class="btn btn--neutral" onclick="showToast('warning')">Warning toast</button>
+      <button class="btn btn--neutral" onclick="showToast('danger')">Error toast</button>
+    </div>
+  </div>
+
+  <!-- DESIGN TOKENS -->
+  <div class="section">
+    <h2>Design Tokens</h2>
+    <div class="demo-card" style="padding: 0; overflow: hidden;">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Token</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>BG (Message)</td><td>--sds-color-background-default-default</td><td>#ffffff</td></tr>
+          <tr><td>Border (Message)</td><td>--sds-color-border-default-default</td><td>#d9d9d9</td></tr>
+          <tr><td>BG (Danger)</td><td>--sds-color-background-danger-tertiary</td><td>#fee9e7</td></tr>
+          <tr><td>Border (Danger)</td><td>--sds-color-border-danger-tertiary</td><td>#ec221f</td></tr>
+          <tr><td>Text (Danger)</td><td>--sds-color-text-danger-default</td><td>#900b09</td></tr>
+          <tr><td>BG (Positive)</td><td>--sds-color-background-positive-secondary</td><td>#cff7d3</td></tr>
+          <tr><td>BG (Warning)</td><td>--sds-color-background-warning-secondary</td><td>#fff1c2</td></tr>
+          <tr><td>Padding</td><td>--sds-size-space-400</td><td>16px</td></tr>
+          <tr><td>Border Radius</td><td>--sds-size-radius-200</td><td>8px</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <script>
+    // Dismiss buttons
+    document.querySelectorAll('.notif__dismiss').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const notif = btn.closest('.notif');
+        if (notif) {
+          notif.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+          notif.style.opacity = '0';
+          notif.style.transform = 'translateY(-4px)';
+          setTimeout(() => notif.remove(), 200);
+        }
+      });
+    });
+
+    // Toast
+    const toastTemplates = {
+      info: {
+        cls: 'notif--message',
+        icon: `<circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5M10 7.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+        title: 'New update available',
+        msg: 'Refresh to apply the latest changes.'
+      },
+      success: {
+        cls: 'notif--positive',
+        icon: `<circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`,
+        title: 'Changes saved',
+        msg: 'Your settings have been updated successfully.'
+      },
+      warning: {
+        cls: 'notif--warning',
+        icon: `<path d="M10 2L1.5 17.5h17L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 9v4M10 15v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+        title: 'Action required',
+        msg: 'Please complete your profile to continue.'
+      },
+      danger: {
+        cls: 'notif--danger',
+        icon: `<path d="M10 2L1.5 17.5h17L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 9v4M10 15v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+        title: 'Something went wrong',
+        msg: 'We could not complete your request. Please try again.'
+      }
+    };
+
+    function showToast(type) {
+      const t = toastTemplates[type];
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `notif ${t.cls}`;
+      el.setAttribute('role', type === 'danger' || type === 'warning' ? 'alert' : 'status');
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(8px)';
+      el.innerHTML = `
+        <div class="notif__icon-col">
+          <div class="notif__icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              ${t.icon}
+            </svg>
+          </div>
+        </div>
+        <div class="notif__body">
+          <p class="notif__title">${t.title}</p>
+          <p class="notif__message">${t.msg}</p>
+        </div>
+        <button class="notif__dismiss" aria-label="Dismiss notification">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      `;
+      container.appendChild(el);
+
+      el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+      requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
+
+      el.querySelector('.notif__dismiss').addEventListener('click', () => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(4px)';
+        setTimeout(() => el.remove(), 200);
+      });
+
+      setTimeout(() => {
+        if (el.parentNode) {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(4px)';
+          setTimeout(() => el.remove(), 200);
+        }
+      }, 4000);
+    }
+  </script>
+
+</body>
+</html>

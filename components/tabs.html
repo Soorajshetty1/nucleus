@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabs – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      color: var(--sds-color-text-default-default);
+      padding: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--sds-color-text-default-default); }
+
+    h1 {
+      font-size: var(--sds-typography-heading-size-base);
+      font-weight: var(--sds-typography-heading-font-weight);
+      letter-spacing: var(--sds-typography-heading-letter-spacing);
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary);
+      margin-bottom: 40px;
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    .section { margin-bottom: 48px; }
+
+    h2 {
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .demo-card {
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      overflow: hidden;
+    }
+
+    /* ══════════════════════════════════════════
+       TABS – LINE STYLE (default)
+    ══════════════════════════════════════════ */
+    .tabs {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tabs__nav {
+      display: flex;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      gap: 0;
+      padding: 0 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tabs__nav::-webkit-scrollbar { display: none; }
+
+    .tabs__tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: var(--sds-typography-body-size-small);
+      font-weight: var(--sds-typography-body-font-weight-regular);
+      color: var(--sds-color-text-neutral-tertiary);
+      cursor: pointer;
+      white-space: nowrap;
+      margin-bottom: -1px;
+      transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      border-radius: var(--sds-size-radius-100) var(--sds-size-radius-100) 0 0;
+      position: relative;
+    }
+
+    .tabs__tab:hover:not(.tabs__tab--active) {
+      color: var(--sds-color-text-neutral-default);
+      background: var(--sds-color-background-default-secondary);
+    }
+
+    .tabs__tab--active {
+      color: var(--sds-color-text-neutral-default);
+      border-bottom-color: var(--sds-color-border-neutral-default);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+    }
+
+    .tabs__tab:focus-visible {
+      outline: 2px solid var(--sds-color-border-brand-default);
+      outline-offset: -2px;
+    }
+
+    /* Badge inside tab */
+    .tabs__badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: var(--sds-size-radius-full);
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--sds-color-background-neutral-tertiary);
+      color: var(--sds-color-text-neutral-default);
+    }
+
+    .tabs__tab--active .tabs__badge {
+      background: var(--sds-color-background-brand-default);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+
+    /* Tab icon */
+    .tabs__tab svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Content panels */
+    .tabs__panels {
+      padding: 24px;
+    }
+
+    .tabs__panel {
+      display: none;
+      animation: fadeIn 0.15s ease;
+    }
+
+    .tabs__panel--active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-title {
+      font-size: var(--sds-typography-body-size-medium);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      margin-bottom: 8px;
+      color: var(--sds-color-text-default-default);
+    }
+
+    .panel-body {
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      line-height: var(--sds-typography-body-line-height);
+    }
+
+    /* ══════════════════════════════════════════
+       TABS – PILL STYLE
+    ══════════════════════════════════════════ */
+    .tabs--pill .tabs__nav {
+      border-bottom: none;
+      background: var(--sds-color-background-default-secondary);
+      border-radius: var(--sds-size-radius-200);
+      padding: 4px;
+      gap: 2px;
+    }
+
+    .tabs--pill .tabs__tab {
+      border-bottom: none;
+      border-radius: var(--sds-size-radius-100);
+      margin-bottom: 0;
+    }
+
+    .tabs--pill .tabs__tab--active {
+      background: var(--sds-color-background-default-default);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      color: var(--sds-color-text-neutral-default);
+    }
+
+    .tabs--pill .tabs__tab:hover:not(.tabs__tab--active) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    /* ══════════════════════════════════════════
+       TABS – CARD STYLE
+    ══════════════════════════════════════════ */
+    .tabs--card .tabs__nav {
+      background: var(--sds-color-background-default-secondary);
+      gap: 0;
+      padding: 0;
+      border-bottom-color: var(--sds-color-border-default-default);
+    }
+
+    .tabs--card .tabs__tab {
+      padding: 14px 20px;
+      border-radius: 0;
+      border-bottom: none;
+      border-right: 1px solid var(--sds-color-border-default-default);
+    }
+
+    .tabs--card .tabs__tab--active {
+      background: var(--sds-color-background-default-default);
+      color: var(--sds-color-text-neutral-default);
+      border-top: 2px solid var(--sds-color-border-neutral-default);
+      margin-top: -1px;
+    }
+
+    .tabs--card .tabs__tab:hover:not(.tabs__tab--active) {
+      background: var(--sds-color-background-default-default);
+    }
+
+    /* ══════════════════════════════════════════
+       VERTICAL TABS
+    ══════════════════════════════════════════ */
+    .tabs--vertical {
+      flex-direction: row;
+    }
+
+    .tabs--vertical .tabs__nav {
+      flex-direction: column;
+      border-bottom: none;
+      border-right: 1px solid var(--sds-color-border-default-default);
+      padding: 8px 0;
+      min-width: 180px;
+      flex-shrink: 0;
+      overflow-x: visible;
+      overflow-y: auto;
+    }
+
+    .tabs--vertical .tabs__tab {
+      border-bottom: none;
+      border-right: 2px solid transparent;
+      border-radius: var(--sds-size-radius-100) 0 0 var(--sds-size-radius-100);
+      margin-bottom: 0;
+      margin-right: -1px;
+      padding: 10px 16px;
+      justify-content: flex-start;
+    }
+
+    .tabs--vertical .tabs__tab--active {
+      border-right-color: var(--sds-color-border-neutral-default);
+    }
+
+    .tabs--vertical .tabs__tab:hover:not(.tabs__tab--active) {
+      background: var(--sds-color-background-default-secondary);
+    }
+
+    .tabs--vertical .tabs__panels {
+      flex: 1;
+    }
+
+    /* ══════════════════════════════════════════
+       TABS – SIZE VARIANTS
+    ══════════════════════════════════════════ */
+    .tabs--sm .tabs__tab {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    .tabs--lg .tabs__tab {
+      padding: 16px 20px;
+      font-size: var(--sds-typography-body-size-medium);
+    }
+
+    /* Token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--sds-typography-body-size-small);
+    }
+    .token-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--sds-color-background-default-secondary);
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-secondary);
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+    }
+    .token-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+      font-family: 'Courier New', monospace;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+
+    .demo-card--plain {
+      background: var(--sds-color-background-default-default);
+      border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 32px;
+    }
+
+    .placeholder-img {
+      background: linear-gradient(135deg, #e3e3e3 0%, #c9c9c9 100%);
+      border-radius: var(--sds-size-radius-100);
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sds-color-text-default-secondary);
+      font-size: var(--sds-typography-body-size-small);
+      margin-top: 12px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .stat-card {
+      background: var(--sds-color-background-default-secondary);
+      border-radius: var(--sds-size-radius-100);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-card__value {
+      font-size: var(--sds-typography-scale-06);
+      font-weight: var(--sds-typography-heading-font-weight);
+      color: var(--sds-color-text-default-default);
+      line-height: 1;
+    }
+
+    .stat-card__label {
+      font-size: var(--sds-typography-body-size-small);
+      color: var(--sds-color-text-default-secondary);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="back-link">← Back to Nucleus</a>
+
+  <h1>Tabs</h1>
+  <p class="page-desc">Tabs organize content into multiple sections and allow users to navigate between them. Each tab panel shows one section of content at a time.</p>
+
+  <!-- LINE TABS (Default) -->
+  <div class="section">
+    <h2>Line (Default)</h2>
+    <div class="demo-card">
+      <div class="tabs" id="tabs-line">
+        <div class="tabs__nav" role="tablist" aria-label="Main tabs">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview">
+            Overview
+          </button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-analytics" id="tab-analytics">
+            Analytics
+            <span class="tabs__badge">3</span>
+          </button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-settings" id="tab-settings">
+            Settings
+          </button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-team" id="tab-team">
+            Team
+          </button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-billing" id="tab-billing">
+            Billing
+          </button>
+        </div>
+        <div class="tabs__panels">
+          <div class="tabs__panel tabs__panel--active" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+            <p class="panel-title">Project Overview</p>
+            <p class="panel-body">This is the overview panel. It gives you a high-level summary of your project's status, recent activity, and key metrics at a glance.</p>
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="stat-card__value">142</div>
+                <div class="stat-card__label">Components</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__value">98%</div>
+                <div class="stat-card__label">Coverage</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__value">7</div>
+                <div class="stat-card__label">Contributors</div>
+              </div>
+            </div>
+          </div>
+          <div class="tabs__panel" id="panel-analytics" role="tabpanel" aria-labelledby="tab-analytics">
+            <p class="panel-title">Analytics</p>
+            <p class="panel-body">Detailed analytics and usage data for your design system components. Track adoption rates, component usage frequency, and identify gaps in coverage.</p>
+            <div class="placeholder-img">Chart placeholder</div>
+          </div>
+          <div class="tabs__panel" id="panel-settings" role="tabpanel" aria-labelledby="tab-settings">
+            <p class="panel-title">Settings</p>
+            <p class="panel-body">Configure your design system preferences, export options, token formats, and integration settings for connected tools like Figma and Storybook.</p>
+          </div>
+          <div class="tabs__panel" id="panel-team" role="tabpanel" aria-labelledby="tab-team">
+            <p class="panel-title">Team</p>
+            <p class="panel-body">Manage team members, roles, and permissions. Invite new contributors and control access levels for different areas of the design system.</p>
+          </div>
+          <div class="tabs__panel" id="panel-billing" role="tabpanel" aria-labelledby="tab-billing">
+            <p class="panel-title">Billing</p>
+            <p class="panel-body">View your subscription plan, usage limits, and invoices. Upgrade or downgrade your plan as your team grows.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS WITH ICONS -->
+  <div class="section">
+    <h2>With Icons</h2>
+    <div class="demo-card">
+      <div class="tabs" id="tabs-icons">
+        <div class="tabs__nav" role="tablist" aria-label="Icon tabs">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true" aria-controls="panel-i-overview" id="tab-i-overview">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M5 8h6M5 11h4M5 5h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Overview
+          </button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-i-components" id="tab-i-components">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="1.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="9.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="1.5" y="9.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="9.5" y="9.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            Components
+            <span class="tabs__badge">12</span>
+          </button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-i-tokens" id="tab-i-tokens">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 5v6M5.5 7l2.5-2 2.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Tokens
+          </button>
+        </div>
+        <div class="tabs__panels">
+          <div class="tabs__panel tabs__panel--active" id="panel-i-overview" role="tabpanel" aria-labelledby="tab-i-overview">
+            <p class="panel-title">Overview</p>
+            <p class="panel-body">High-level summary with icons in the tab labels for improved scannability.</p>
+          </div>
+          <div class="tabs__panel" id="panel-i-components" role="tabpanel" aria-labelledby="tab-i-components">
+            <p class="panel-title">Components</p>
+            <p class="panel-body">Browse all 12 available components with their variants and states.</p>
+          </div>
+          <div class="tabs__panel" id="panel-i-tokens" role="tabpanel" aria-labelledby="tab-i-tokens">
+            <p class="panel-title">Tokens</p>
+            <p class="panel-body">All design tokens including color, typography, spacing, and radius values.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PILL TABS -->
+  <div class="section">
+    <h2>Pill Style</h2>
+    <div class="demo-card--plain">
+      <div class="tabs tabs--pill" id="tabs-pill">
+        <div class="tabs__nav" role="tablist" aria-label="Pill tabs">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true" aria-controls="panel-p-all" id="tab-p-all">All</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-p-active" id="tab-p-active">Active</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-p-draft" id="tab-p-draft">Drafts</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-p-archived" id="tab-p-archived">Archived</button>
+        </div>
+        <div class="tabs__panels" style="padding: 20px 0 0;">
+          <div class="tabs__panel tabs__panel--active" id="panel-p-all" role="tabpanel" aria-labelledby="tab-p-all">
+            <p class="panel-body">Showing all 24 items across all statuses.</p>
+          </div>
+          <div class="tabs__panel" id="panel-p-active" role="tabpanel" aria-labelledby="tab-p-active">
+            <p class="panel-body">Showing 16 active items currently in production.</p>
+          </div>
+          <div class="tabs__panel" id="panel-p-draft" role="tabpanel" aria-labelledby="tab-p-draft">
+            <p class="panel-body">Showing 6 draft items not yet published.</p>
+          </div>
+          <div class="tabs__panel" id="panel-p-archived" role="tabpanel" aria-labelledby="tab-p-archived">
+            <p class="panel-body">Showing 2 archived items no longer in use.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD TABS -->
+  <div class="section">
+    <h2>Card Style</h2>
+    <div class="demo-card" style="overflow: visible;">
+      <div class="tabs tabs--card" id="tabs-card">
+        <div class="tabs__nav" role="tablist" aria-label="Card tabs">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true" aria-controls="panel-c-profile" id="tab-c-profile">Profile</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-c-security" id="tab-c-security">Security</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-c-notifications" id="tab-c-notifications">Notifications</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-c-integrations" id="tab-c-integrations">Integrations</button>
+        </div>
+        <div class="tabs__panels">
+          <div class="tabs__panel tabs__panel--active" id="panel-c-profile" role="tabpanel" aria-labelledby="tab-c-profile">
+            <p class="panel-title">Profile Settings</p>
+            <p class="panel-body">Update your name, email address, profile photo, and public-facing display preferences.</p>
+          </div>
+          <div class="tabs__panel" id="panel-c-security" role="tabpanel" aria-labelledby="tab-c-security">
+            <p class="panel-title">Security Settings</p>
+            <p class="panel-body">Manage your password, two-factor authentication, and active sessions.</p>
+          </div>
+          <div class="tabs__panel" id="panel-c-notifications" role="tabpanel" aria-labelledby="tab-c-notifications">
+            <p class="panel-title">Notification Preferences</p>
+            <p class="panel-body">Choose when and how you receive email, push, and in-app notifications.</p>
+          </div>
+          <div class="tabs__panel" id="panel-c-integrations" role="tabpanel" aria-labelledby="tab-c-integrations">
+            <p class="panel-title">Integrations</p>
+            <p class="panel-body">Connect your account with third-party services like GitHub, Slack, and Figma.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERTICAL TABS -->
+  <div class="section">
+    <h2>Vertical Layout</h2>
+    <div class="demo-card">
+      <div class="tabs tabs--vertical" id="tabs-vertical">
+        <div class="tabs__nav" role="tablist" aria-label="Vertical tabs" aria-orientation="vertical">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true" aria-controls="panel-v-general" id="tab-v-general">General</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-v-appearance" id="tab-v-appearance">Appearance</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-v-privacy" id="tab-v-privacy">Privacy</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-v-advanced" id="tab-v-advanced">Advanced</button>
+          <button class="tabs__tab" role="tab" aria-selected="false" aria-controls="panel-v-danger" id="tab-v-danger">Danger zone</button>
+        </div>
+        <div class="tabs__panels">
+          <div class="tabs__panel tabs__panel--active" id="panel-v-general" role="tabpanel" aria-labelledby="tab-v-general">
+            <p class="panel-title">General Settings</p>
+            <p class="panel-body">Configure general application settings including language, timezone, and date format preferences.</p>
+          </div>
+          <div class="tabs__panel" id="panel-v-appearance" role="tabpanel" aria-labelledby="tab-v-appearance">
+            <p class="panel-title">Appearance</p>
+            <p class="panel-body">Customize the look and feel: choose between light and dark mode, adjust font size, and set your preferred color theme.</p>
+          </div>
+          <div class="tabs__panel" id="panel-v-privacy" role="tabpanel" aria-labelledby="tab-v-privacy">
+            <p class="panel-title">Privacy</p>
+            <p class="panel-body">Control your data sharing preferences, download your data, and manage cookie consent settings.</p>
+          </div>
+          <div class="tabs__panel" id="panel-v-advanced" role="tabpanel" aria-labelledby="tab-v-advanced">
+            <p class="panel-title">Advanced</p>
+            <p class="panel-body">Advanced configuration options for power users. These settings may affect application performance.</p>
+          </div>
+          <div class="tabs__panel" id="panel-v-danger" role="tabpanel" aria-labelledby="tab-v-danger">
+            <p class="panel-title">Danger Zone</p>
+            <p class="panel-body" style="color: var(--sds-color-text-danger-default);">Permanently delete your account and all associated data. This action cannot be undone.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIZE VARIANTS -->
+  <div class="section">
+    <h2>Sizes</h2>
+    <div class="demo-card" style="gap: 0;">
+      <p style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--sds-color-text-default-tertiary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--sds-color-border-default-default);">Small</p>
+      <div class="tabs tabs--sm" id="tabs-sm">
+        <div class="tabs__nav" role="tablist">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true">Dashboard</button>
+          <button class="tabs__tab" role="tab" aria-selected="false">Reports</button>
+          <button class="tabs__tab" role="tab" aria-selected="false">Exports</button>
+        </div>
+      </div>
+      <p style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--sds-color-text-default-tertiary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--sds-color-border-default-default); border-top: 1px solid var(--sds-color-border-default-default);">Medium (default)</p>
+      <div class="tabs" id="tabs-md">
+        <div class="tabs__nav" role="tablist">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true">Dashboard</button>
+          <button class="tabs__tab" role="tab" aria-selected="false">Reports</button>
+          <button class="tabs__tab" role="tab" aria-selected="false">Exports</button>
+        </div>
+      </div>
+      <p style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--sds-color-text-default-tertiary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--sds-color-border-default-default); border-top: 1px solid var(--sds-color-border-default-default);">Large</p>
+      <div class="tabs tabs--lg" id="tabs-lg">
+        <div class="tabs__nav" role="tablist">
+          <button class="tabs__tab tabs__tab--active" role="tab" aria-selected="true">Dashboard</button>
+          <button class="tabs__tab" role="tab" aria-selected="false">Reports</button>
+          <button class="tabs__tab" role="tab" aria-selected="false">Exports</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN TOKENS -->
+  <div class="section">
+    <h2>Design Tokens</h2>
+    <div class="demo-card--plain" style="padding: 0; overflow: hidden; border: 1px solid var(--sds-color-border-default-default); border-radius: var(--sds-size-radius-200);">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Token</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Active border</td><td>--sds-color-border-neutral-default</td><td>#303030</td></tr>
+          <tr><td>Active text</td><td>--sds-color-text-neutral-default</td><td>#303030</td></tr>
+          <tr><td>Inactive text</td><td>--sds-color-text-neutral-tertiary</td><td>#767676</td></tr>
+          <tr><td>Inactive border</td><td>--sds-color-border-neutral-tertiary</td><td>#b2b2b2</td></tr>
+          <tr><td>Hover bg</td><td>--sds-color-background-default-secondary</td><td>#f5f5f5</td></tr>
+          <tr><td>Divider line</td><td>--sds-color-border-default-default</td><td>#d9d9d9</td></tr>
+          <tr><td>Font size</td><td>--sds-typography-body-size-small</td><td>14px</td></tr>
+          <tr><td>Padding</td><td>12px 16px</td><td>custom</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function initTabs(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const tabs = container.querySelectorAll('[role="tab"]');
+      const panels = container.querySelectorAll('[role="tabpanel"]');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const targetId = tab.getAttribute('aria-controls');
+
+          tabs.forEach(t => {
+            t.classList.remove('tabs__tab--active');
+            t.setAttribute('aria-selected', 'false');
+          });
+
+          panels.forEach(p => {
+            p.classList.remove('tabs__panel--active');
+          });
+
+          tab.classList.add('tabs__tab--active');
+          tab.setAttribute('aria-selected', 'true');
+
+          const target = document.getElementById(targetId);
+          if (target) target.classList.add('tabs__panel--active');
+        });
+
+        // Keyboard navigation
+        tab.addEventListener('keydown', (e) => {
+          const isVertical = tab.closest('.tabs--vertical') !== null;
+          const prevKey = isVertical ? 'ArrowUp' : 'ArrowLeft';
+          const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
+          const tabList = Array.from(tabs);
+          const idx = tabList.indexOf(tab);
+
+          if (e.key === nextKey) {
+            e.preventDefault();
+            const next = tabList[(idx + 1) % tabList.length];
+            next.focus();
+            next.click();
+          } else if (e.key === prevKey) {
+            e.preventDefault();
+            const prev = tabList[(idx - 1 + tabList.length) % tabList.length];
+            prev.focus();
+            prev.click();
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            tabList[0].focus();
+            tabList[0].click();
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            tabList[tabList.length - 1].focus();
+            tabList[tabList.length - 1].click();
+          }
+        });
+      });
+    }
+
+    ['tabs-line', 'tabs-icons', 'tabs-pill', 'tabs-card', 'tabs-vertical'].forEach(initTabs);
+
+    // Size variant tabs (no panels)
+    ['tabs-sm', 'tabs-md', 'tabs-lg'].forEach(id => {
+      const container = document.getElementById(id);
+      if (!container) return;
+      container.querySelectorAll('[role="tab"]').forEach(tab => {
+        tab.addEventListener('click', () => {
+          container.querySelectorAll('[role="tab"]').forEach(t => {
+            t.classList.remove('tabs__tab--active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('tabs__tab--active');
+          tab.setAttribute('aria-selected', 'true');
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

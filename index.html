@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nucleus Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: #f7f7f7;
+      color: var(--sds-color-text-default-default);
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--sds-color-background-brand-default);
+      padding: 32px 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar__logo {
+      font-size: 18px;
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-brand-on-brand);
+      margin-bottom: 32px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .sidebar__section {
+      margin-bottom: 24px;
+    }
+
+    .sidebar__label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245,245,245,0.45);
+      margin-bottom: 8px;
+      padding: 0 8px;
+    }
+
+    .sidebar__link {
+      display: block;
+      padding: 6px 8px;
+      border-radius: var(--sds-size-radius-100);
+      font-size: 14px;
+      color: rgba(245,245,245,0.75);
+      text-decoration: none;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .sidebar__link:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+
+    .sidebar__link.available {
+      color: var(--sds-color-text-brand-on-brand);
+    }
+
+    /* ── Main ── */
+    .main {
+      padding: 56px 64px;
+      max-width: 1100px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 56px;
+    }
+
+    .hero__eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sds-color-text-default-secondary);
+      margin-bottom: 12px;
+    }
+
+    .hero__title {
+      font-size: 40px;
+      font-weight: var(--sds-typography-heading-font-weight);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--sds-color-text-default-default);
+      margin-bottom: 16px;
+    }
+
+    .hero__subtitle {
+      font-size: var(--sds-typography-body-size-medium);
+      line-height: var(--sds-typography-body-line-height);
+      color: var(--sds-color-text-default-secondary);
+      max-width: 520px;
+    }
+
+    /* ── Token strip ── */
+    .token-strip {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 56px;
+      flex-wrap: wrap;
+    }
+
+    .token-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--sds-size-radius-full);
+      border: 1px solid var(--sds-color-border-default-default);
+      font-size: 12px;
+      color: var(--sds-color-text-default-secondary);
+      background: var(--sds-color-background-default-default);
+    }
+
+    .token-chip__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 48px; }
+
+    .section__header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--sds-color-border-default-default);
+    }
+
+    .section__title {
+      font-size: 18px;
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-default);
+    }
+
+    .section__count {
+      font-size: 13px;
+      color: var(--sds-color-text-default-secondary);
+    }
+
+    /* ── Component grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── Component card ── */
+    .comp-card {
+      background: var(--sds-color-background-default-default);
+      border: 1px solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      padding: 20px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .comp-card:hover {
+      border-color: var(--sds-color-border-neutral-secondary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .comp-card--available {
+      cursor: pointer;
+    }
+
+    .comp-card--unavailable {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .comp-card__name {
+      font-size: 14px;
+      font-weight: var(--sds-typography-body-font-weight-strong);
+      color: var(--sds-color-text-default-default);
+    }
+
+    .comp-card__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .comp-card__arrow {
+      font-size: 14px;
+      color: var(--sds-color-text-default-secondary);
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--sds-size-radius-full);
+    }
+
+    .badge--ready {
+      background: var(--sds-color-background-positive-secondary);
+      color: var(--sds-color-text-positive-on-positive-secondary);
+    }
+
+    .badge--soon {
+      background: var(--sds-color-background-default-secondary);
+      color: var(--sds-color-text-default-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <a class="sidebar__logo" href="index.html">Nucleus</a>
+
+      <div class="sidebar__section">
+        <div class="sidebar__label">Components</div>
+        <a class="sidebar__link available" href="components/accordion.html">Accordion</a>
+        <a class="sidebar__link available" href="components/accordion-item.html">Accordion Item</a>
+        <a class="sidebar__link available" href="components/avatar.html">Avatar</a>
+        <a class="sidebar__link available" href="components/button.html">Button</a>
+        <a class="sidebar__link available" href="components/card.html">Card</a>
+        <a class="sidebar__link available" href="components/input.html">Input</a>
+        <a class="sidebar__link available" href="components/notification.html">Notification</a>
+        <a class="sidebar__link available" href="components/tabs.html">Tabs</a>
+        <a class="sidebar__link available" href="components/tag.html">Tag</a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__label">Coming soon</div>
+        <a class="sidebar__link" href="#">AI Chat</a>
+        <a class="sidebar__link" href="#">Calendar</a>
+        <a class="sidebar__link" href="#">Dialog</a>
+        <a class="sidebar__link" href="#">Forms</a>
+        <a class="sidebar__link" href="#">Menu</a>
+        <a class="sidebar__link" href="#">Navigation</a>
+        <a class="sidebar__link" href="#">Pagination</a>
+        <a class="sidebar__link" href="#">Text</a>
+        <a class="sidebar__link" href="#">Tooltip</a>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- Hero -->
+      <div class="hero">
+        <p class="hero__eyebrow">Design System</p>
+        <h1 class="hero__title">Nucleus</h1>
+        <p class="hero__subtitle">A collection of reusable components built from Figma design tokens — ready to copy, extend, and ship.</p>
+      </div>
+
+      <!-- Token preview strip -->
+      <div class="token-strip">
+        <span class="token-chip"><span class="token-chip__dot" style="background:#2c2c2c"></span>Brand</span>
+        <span class="token-chip"><span class="token-chip__dot" style="background:#ec221f"></span>Danger</span>
+        <span class="token-chip"><span class="token-chip__dot" style="background:#14ae5c"></span>Positive</span>
+        <span class="token-chip"><span class="token-chip__dot" style="background:#e8b931"></span>Warning</span>
+        <span class="token-chip"><span class="token-chip__dot" style="background:#e3e3e3; border:1px solid #d9d9d9"></span>Neutral</span>
+        <span class="token-chip">Inter · 16px body</span>
+        <span class="token-chip">8px radius</span>
+      </div>
+
+      <!-- Accordion -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Accordion</span>
+          <span class="section__count">2 components</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/accordion.html">
+            <span class="comp-card__name">Accordion</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+          <a class="comp-card comp-card--available" href="components/accordion-item.html">
+            <span class="comp-card__name">Accordion Item</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Avatars -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Avatars</span>
+          <span class="section__count">3 components</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/avatar.html">
+            <span class="comp-card__name">Avatar</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Avatar Block</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Avatar Group</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Buttons</span>
+          <span class="section__count">4 components</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/button.html">
+            <span class="comp-card__name">Button</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Button Danger</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Icon Button</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Button Group</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Cards</span>
+          <span class="section__count">6 components</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/card.html">
+            <span class="comp-card__name">Card</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Product Info Card</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Testimonial Card</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Stats Card</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Pricing Card</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Review Card</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Inputs</span>
+          <span class="section__count">11 components</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/input.html">
+            <span class="comp-card__name">Input Field</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Checkbox Field</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Radio Field</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Select Field</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Textarea Field</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Switch Field</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Slider Field</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Search</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Date Picker Field</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Checkbox Group</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Radio Group</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Notification</span>
+          <span class="section__count">1 component</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/notification.html">
+            <span class="comp-card__name">Notification</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Tabs</span>
+          <span class="section__count">2 components</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/tabs.html">
+            <span class="comp-card__name">Tabs</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Tab</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Tags</span>
+          <span class="section__count">3 components</span>
+        </div>
+        <div class="grid">
+          <a class="comp-card comp-card--available" href="components/tag.html">
+            <span class="comp-card__name">Tag</span>
+            <div class="comp-card__meta">
+              <span class="badge badge--ready">Ready</span>
+              <span class="comp-card__arrow">→</span>
+            </div>
+          </a>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Tag Toggle</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+          <div class="comp-card comp-card--unavailable">
+            <span class="comp-card__name">Tag Toggle Group</span>
+            <div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coming Soon categories -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">AI Chat</span>
+          <span class="section__count">5 components</span>
+        </div>
+        <div class="grid">
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">AI Sidebar</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Chat Response</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Code Block</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Conversation</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">AI Chat Box</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Navigation</span>
+          <span class="section__count">4 components</span>
+        </div>
+        <div class="grid">
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Button</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Button List</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Pill</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Navigation Pill List</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">Other</span>
+          <span class="section__count">Calendar · Dialog · Forms · Menu · Pagination · Text · Tooltip</span>
+        </div>
+        <div class="grid">
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Calendar</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Dialog</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Menu</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Pagination</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Text</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Tooltip</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+          <div class="comp-card comp-card--unavailable"><span class="comp-card__name">Forms</span><div class="comp-card__meta"><span class="badge badge--soon">Soon</span></div></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>
