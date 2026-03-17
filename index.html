@@ -195,6 +195,52 @@
 
     .divider { border: none; border-top: 1px solid var(--sds-color-border-default-default); margin: 48px 0; }
     .pin { padding: 10px; }
+
+    /* ── DARK MODE ── */
+    [data-theme="dark"] {
+      --sds-color-text-default-default: #f0f0f0;
+      --sds-color-text-default-secondary: #a0a0a0;
+      --sds-color-text-default-tertiary: #606060;
+      --sds-color-text-neutral-default: #d4d4d4;
+      --sds-color-text-neutral-tertiary: #707070;
+      --sds-color-text-brand-on-brand: #f5f5f5;
+      --sds-color-background-default-default: #141414;
+      --sds-color-background-default-default-hover: #1e1e1e;
+      --sds-color-background-default-secondary: #1e1e1e;
+      --sds-color-background-default-secondary-hover: #282828;
+      --sds-color-background-default-tertiary: #2c2c2c;
+      --sds-color-background-neutral-tertiary: #2a2a2a;
+      --sds-color-background-neutral-tertiary-hover: #333;
+      --sds-color-background-brand-default: #e0e0e0;
+      --sds-color-background-brand-hover: #f0f0f0;
+      --sds-color-background-brand-tertiary: #222;
+      --sds-color-border-default-default: #2c2c2c;
+      --sds-color-border-default-secondary: #444;
+      --sds-color-border-neutral-secondary: #555;
+      --sds-color-border-neutral-tertiary: #3a3a3a;
+      --sds-color-border-brand-default: #e0e0e0;
+      --sds-color-icon-default-default: #d0d0d0;
+      background: #0e0e0e;
+      color-scheme: dark;
+    }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 12px; border-radius: var(--sds-size-radius-200);
+      border: 1px solid var(--sds-color-border-default-default);
+      background: transparent; cursor: pointer;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: 13px; font-weight: 500;
+      color: var(--sds-color-text-default-secondary);
+      transition: background 0.15s, color 0.15s;
+    }
+    .theme-toggle:hover { background: var(--sds-color-background-default-secondary); color: var(--sds-color-text-default-default); }
+    .theme-toggle svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+    [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
   </style>
 </head>
 <body>
@@ -301,6 +347,18 @@
       <div class="topbar__actions">
         <a href="https://fonts.google.com/specimen/Inter" target="_blank" class="topbar__btn topbar__btn--ghost">Inter font</a>
         <a href="./tokens.css" target="_blank" class="topbar__btn topbar__btn--primary">tokens.css</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <!-- Moon (shown in light mode) -->
+          <svg class="icon-moon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.5 10A6 6 0 0 1 6 2.5a6 6 0 1 0 7.5 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          <!-- Sun (shown in dark mode) -->
+          <svg class="icon-sun" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span id="theme-label">Dark</span>
+        </button>
       </div>
     </header>
 
@@ -1120,6 +1178,25 @@
       if (countEl) {
         countEl.textContent = q ? (visible + ' result' + (visible !== 1 ? 's' : '') + ' found') : '70+ components across 17 categories';
       }
+    });
+  }
+
+  // ── Dark mode toggle ──
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  var label = document.getElementById('theme-label');
+  var saved = localStorage.getItem('nucleus-theme');
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+    label.textContent = saved === 'dark' ? 'Light' : 'Dark';
+  }
+  if (btn) {
+    btn.addEventListener('click', function() {
+      var isDark = root.getAttribute('data-theme') === 'dark';
+      var next = isDark ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      label.textContent = next === 'dark' ? 'Light' : 'Dark';
+      localStorage.setItem('nucleus-theme', next);
     });
   }
 </script>
