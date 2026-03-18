@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get started – Nucleus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sds-typography-body-font-family);
+      background: var(--sds-color-background-default-secondary);
+      color: var(--sds-color-text-default-default);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"] {
+      --sds-color-text-default-default: #f0f0f0;
+      --sds-color-text-default-secondary: #a0a0a0;
+      --sds-color-text-default-tertiary: #606060;
+      --sds-color-text-neutral-default: #d4d4d4;
+      --sds-color-text-neutral-tertiary: #707070;
+      --sds-color-text-brand-on-brand: #141414;
+      --sds-color-background-default-default: #1a1a1a;
+      --sds-color-background-default-default-hover: #222;
+      --sds-color-background-default-secondary: #111;
+      --sds-color-background-default-tertiary: #2c2c2c;
+      --sds-color-background-neutral-tertiary: #2a2a2a;
+      --sds-color-background-neutral-tertiary-hover: #333;
+      --sds-color-background-brand-default: #f0f0f0;
+      --sds-color-background-brand-hover: #ffffff;
+      --sds-color-border-default-default: #2c2c2c;
+      --sds-color-border-default-secondary: #444;
+      --sds-color-border-neutral-secondary: #555;
+      --sds-color-border-disabled-default: #333;
+      --sds-color-icon-default-default: #d0d0d0;
+      background: #0e0e0e;
+      color-scheme: dark;
+    }
+
+    /* ── Shell ── */
+    .shell {
+      width: 100%;
+      max-width: 960px;
+      min-height: 600px;
+      background: var(--sds-color-background-default-default);
+      border: 1px solid var(--sds-color-border-default-default);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+    }
+
+    /* ── Left panel ── */
+    .panel {
+      background: var(--sds-color-background-brand-default);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+
+    .panel__logo-mark {
+      width: 32px; height: 32px;
+      background: var(--sds-color-text-brand-on-brand);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .panel__logo-mark svg { width: 16px; height: 16px; color: var(--sds-color-background-brand-default); }
+
+    .panel__logo-name {
+      font-size: 16px; font-weight: 700;
+      color: var(--sds-color-text-brand-on-brand);
+      letter-spacing: -0.01em;
+    }
+
+    /* Step nav */
+    .steps { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+
+    .step-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px; border-radius: var(--sds-size-radius-200);
+      cursor: default;
+      transition: background 0.15s;
+    }
+
+    .step-item__dot {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid rgba(0,0,0,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      color: rgba(0,0,0,0.35);
+      background: transparent;
+      transition: all 0.2s;
+    }
+
+    .step-item__label {
+      font-size: 13px; font-weight: 500;
+      color: rgba(0,0,0,0.4);
+      transition: color 0.2s;
+    }
+
+    .step-item--active .step-item__dot {
+      background: rgba(0,0,0,0.12);
+      border-color: rgba(0,0,0,0.25);
+      color: rgba(0,0,0,0.7);
+    }
+
+    .step-item--active .step-item__label { color: rgba(0,0,0,0.85); font-weight: 600; }
+
+    .step-item--done .step-item__dot {
+      background: rgba(0,0,0,0.15);
+      border-color: transparent;
+      color: rgba(0,0,0,0.6);
+    }
+    .step-item--done .step-item__label { color: rgba(0,0,0,0.55); }
+
+    [data-theme="dark"] .step-item__dot { border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.3); }
+    [data-theme="dark"] .step-item__label { color: rgba(255,255,255,0.35); }
+    [data-theme="dark"] .step-item--active .step-item__dot { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.75); }
+    [data-theme="dark"] .step-item--active .step-item__label { color: rgba(255,255,255,0.9); }
+    [data-theme="dark"] .step-item--done .step-item__dot { background: rgba(255,255,255,0.1); border-color: transparent; color: rgba(255,255,255,0.5); }
+    [data-theme="dark"] .step-item--done .step-item__label { color: rgba(255,255,255,0.45); }
+
+    .panel__theme-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 12px;
+      background: rgba(0,0,0,0.08); border: none; border-radius: var(--sds-size-radius-200);
+      font-family: var(--sds-typography-body-font-family);
+      font-size: 12px; font-weight: 500;
+      color: rgba(0,0,0,0.5); cursor: pointer;
+      transition: background 0.15s;
+      align-self: flex-start;
+    }
+    .panel__theme-btn:hover { background: rgba(0,0,0,0.14); color: rgba(0,0,0,0.75); }
+    [data-theme="dark"] .panel__theme-btn { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.45); }
+    [data-theme="dark"] .panel__theme-btn:hover { background: rgba(255,255,255,0.13); color: rgba(255,255,255,0.7); }
+    .panel__theme-btn svg { width: 13px; height: 13px; }
+    .panel__theme-btn .icon-sun { display: none; }
+    .panel__theme-btn .icon-moon { display: block; }
+    [data-theme="dark"] .panel__theme-btn .icon-sun { display: block; }
+    [data-theme="dark"] .panel__theme-btn .icon-moon { display: none; }
+
+    /* ── Right panel ── */
+    .form-area {
+      padding: 48px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 600px;
+    }
+
+    /* Steps */
+    .step { display: none; flex-direction: column; flex: 1; }
+    .step.active { display: flex; }
+
+    .step__header { margin-bottom: 36px; }
+    .step__eyebrow {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--sds-color-text-default-secondary);
+      margin-bottom: 8px;
+    }
+    .step__title {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+      color: var(--sds-color-text-default-default); line-height: 1.2; margin-bottom: 8px;
+    }
+    .step__subtitle {
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-secondary); line-height: 1.5;
+    }
+
+    /* Form fields */
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+    .field:last-of-type { margin-bottom: 0; }
+
+    .field__label {
+      font-size: 14px; font-weight: 500;
+      color: var(--sds-color-text-default-default);
+    }
+
+    .field__hint {
+      font-size: 13px; color: var(--sds-color-text-default-secondary);
+      margin-top: -2px;
+    }
+
+    .field__input {
+      width: 100%;
+      padding: var(--sds-size-space-300) var(--sds-size-space-400);
+      background: var(--sds-color-background-default-default);
+      border: 1px solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+      font-family: var(--sds-typography-body-font-family);
+      font-size: var(--sds-typography-body-size-medium);
+      color: var(--sds-color-text-default-default);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field__input::placeholder { color: var(--sds-color-text-default-tertiary); }
+    .field__input:focus {
+      border-color: var(--sds-color-border-neutral-default);
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+    }
+    [data-theme="dark"] .field__input:focus { box-shadow: 0 0 0 3px rgba(255,255,255,0.06); }
+
+    .field__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Avatar picker */
+    .avatar-picker {
+      display: flex; align-items: center; gap: 20px; margin-bottom: 28px;
+    }
+    .avatar-preview {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--sds-color-background-brand-default);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700;
+      color: var(--sds-color-text-brand-on-brand);
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .avatar-picker__actions { display: flex; flex-direction: column; gap: 6px; }
+    .avatar-picker__label {
+      font-size: 13px; font-weight: 500; color: var(--sds-color-text-default-default);
+    }
+    .avatar-picker__hint { font-size: 12px; color: var(--sds-color-text-default-secondary); }
+    .avatar-picker__btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--sds-size-radius-200);
+      border: 1px solid var(--sds-color-border-default-default);
+      background: transparent; cursor: pointer;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: 13px; font-weight: 500;
+      color: var(--sds-color-text-default-secondary);
+      transition: background 0.15s, color 0.15s;
+    }
+    .avatar-picker__btn:hover { background: var(--sds-color-background-default-secondary); color: var(--sds-color-text-default-default); }
+
+    /* Tag selector */
+    .tag-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .sel-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: var(--sds-size-radius-200);
+      border: 1px solid var(--sds-color-border-default-default);
+      background: var(--sds-color-background-default-default);
+      font-size: 14px; font-weight: 500;
+      color: var(--sds-color-text-default-secondary);
+      cursor: pointer; user-select: none;
+      transition: all 0.15s;
+    }
+    .sel-tag:hover { border-color: var(--sds-color-border-neutral-secondary); color: var(--sds-color-text-default-default); }
+    .sel-tag.selected {
+      background: var(--sds-color-background-brand-default);
+      border-color: var(--sds-color-background-brand-default);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+    .sel-tag svg { width: 14px; height: 14px; opacity: 0; transition: opacity 0.15s; }
+    .sel-tag.selected svg { opacity: 1; }
+
+    /* Invite list */
+    .invite-input-row {
+      display: flex; gap: 10px; margin-bottom: 20px;
+    }
+    .invite-input-row .field__input { flex: 1; margin: 0; }
+
+    .invite-list { display: flex; flex-direction: column; gap: 8px; }
+    .invite-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      background: var(--sds-color-background-default-secondary);
+      border: 1px solid var(--sds-color-border-default-default);
+      border-radius: var(--sds-size-radius-200);
+    }
+    .invite-item__avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      color: var(--sds-color-text-brand-on-brand);
+      flex-shrink: 0;
+    }
+    .invite-item__info { flex: 1; min-width: 0; }
+    .invite-item__email { font-size: 13px; font-weight: 500; color: var(--sds-color-text-default-default); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .invite-item__status { font-size: 12px; color: var(--sds-color-text-default-secondary); }
+    .invite-item__remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--sds-color-text-default-secondary); padding: 4px;
+      border-radius: 4px; display: flex;
+      transition: color 0.15s;
+    }
+    .invite-item__remove:hover { color: var(--sds-color-text-danger-default); }
+    .invite-item__remove svg { width: 14px; height: 14px; }
+
+    /* Success step */
+    .success-body {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; gap: 0;
+    }
+    .success-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--sds-color-background-positive-secondary);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+    }
+    .success-icon svg { width: 32px; height: 32px; stroke: var(--sds-color-text-positive-on-positive-secondary); stroke-width: 2.5; fill: none; }
+    .success-title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .success-sub { font-size: var(--sds-typography-body-size-medium); color: var(--sds-color-text-default-secondary); line-height: 1.6; max-width: 320px; margin-bottom: 32px; }
+    .summary-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 32px; }
+    .summary-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: var(--sds-size-radius-full);
+      background: var(--sds-color-background-default-secondary);
+      border: 1px solid var(--sds-color-border-default-default);
+      font-size: 13px; font-weight: 500;
+      color: var(--sds-color-text-default-default);
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      height: 3px; background: var(--sds-color-background-default-secondary);
+      border-radius: 99px; overflow: hidden; margin-bottom: 36px;
+    }
+    .progress-bar__fill {
+      height: 100%; background: var(--sds-color-background-brand-default);
+      border-radius: 99px; transition: width 0.4s ease;
+    }
+
+    /* Footer nav */
+    .form-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 28px;
+      border-top: 1px solid var(--sds-color-border-default-default);
+      margin-top: 28px;
+    }
+    .form-footer__skip {
+      font-size: 14px; color: var(--sds-color-text-default-secondary);
+      background: none; border: none; cursor: pointer;
+      font-family: var(--sds-typography-body-font-family);
+      padding: 0;
+      transition: color 0.15s;
+    }
+    .form-footer__skip:hover { color: var(--sds-color-text-default-default); }
+
+    .form-footer__nav { display: flex; gap: 10px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 22px; border-radius: var(--sds-size-radius-200);
+      border: 1px solid transparent;
+      font-family: var(--sds-typography-body-font-family);
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn svg { width: 16px; height: 16px; }
+
+    .btn--primary {
+      background: var(--sds-color-background-brand-default);
+      border-color: var(--sds-color-background-brand-default);
+      color: var(--sds-color-text-brand-on-brand);
+    }
+    .btn--primary:hover { background: var(--sds-color-background-brand-hover); border-color: var(--sds-color-background-brand-hover); }
+
+    .btn--ghost {
+      background: transparent;
+      border-color: var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-secondary);
+    }
+    .btn--ghost:hover { background: var(--sds-color-background-default-secondary); color: var(--sds-color-text-default-default); }
+
+    .btn--add {
+      padding: 10px 18px;
+      background: var(--sds-color-background-default-default);
+      border-color: var(--sds-color-border-default-default);
+      color: var(--sds-color-text-default-default);
+    }
+    .btn--add:hover { background: var(--sds-color-background-default-secondary); }
+  </style>
+</head>
+<body>
+<div data-theme="" id="root">
+<div class="shell">
+
+  <!-- ── Left panel ── -->
+  <aside class="panel">
+    <div>
+      <div class="panel__logo">
+        <div class="panel__logo-mark">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="10.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="1.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="10.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="panel__logo-name">Nucleus</span>
+      </div>
+
+      <nav class="steps" aria-label="Onboarding steps">
+        <div class="step-item step-item--active" data-step="1">
+          <div class="step-item__dot">1</div>
+          <span class="step-item__label">Welcome</span>
+        </div>
+        <div class="step-item" data-step="2">
+          <div class="step-item__dot">2</div>
+          <span class="step-item__label">Your profile</span>
+        </div>
+        <div class="step-item" data-step="3">
+          <div class="step-item__dot">3</div>
+          <span class="step-item__label">Interests</span>
+        </div>
+        <div class="step-item" data-step="4">
+          <div class="step-item__dot">4</div>
+          <span class="step-item__label">Invite team</span>
+        </div>
+        <div class="step-item" data-step="5">
+          <div class="step-item__dot">5</div>
+          <span class="step-item__label">All set</span>
+        </div>
+      </nav>
+    </div>
+
+    <button class="panel__theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 16 16" fill="none">
+        <path d="M13.5 10A6 6 0 0 1 6 2.5a6 6 0 1 0 7.5 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span id="theme-label">Dark mode</span>
+    </button>
+  </aside>
+
+  <!-- ── Right: form area ── -->
+  <section class="form-area" aria-live="polite">
+
+    <!-- Progress bar -->
+    <div class="progress-bar" aria-hidden="true">
+      <div class="progress-bar__fill" id="progress" style="width: 20%"></div>
+    </div>
+
+    <!-- Step 1: Welcome -->
+    <div class="step active" id="step-1">
+      <div class="step__header">
+        <p class="step__eyebrow">Step 1 of 4</p>
+        <h1 class="step__title">Welcome to Nucleus 👋</h1>
+        <p class="step__subtitle">Let's get you set up in just a few steps. It only takes about 2 minutes.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;flex:1;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border:1px solid var(--sds-color-border-default-default);border-radius:var(--sds-size-radius-200);background:var(--sds-color-background-default-secondary);">
+          <div style="width:36px;height:36px;border-radius:var(--sds-size-radius-200);background:var(--sds-color-background-positive-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M3 9l4 4 8-8" stroke="#02542d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--sds-color-text-default-default);">70+ components ready</div>
+            <div style="font-size:13px;color:var(--sds-color-text-default-secondary);">Built on SDS design tokens</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border:1px solid var(--sds-color-border-default-default);border-radius:var(--sds-size-radius-200);background:var(--sds-color-background-default-secondary);">
+          <div style="width:36px;height:36px;border-radius:var(--sds-size-radius-200);background:var(--sds-color-background-warning-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><circle cx="9" cy="9" r="6.5" stroke="#682d03" stroke-width="1.5"/><path d="M9 6v3.5M9 12h.01" stroke="#682d03" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--sds-color-text-default-default);">Zero dependencies</div>
+            <div style="font-size:13px;color:var(--sds-color-text-default-secondary);">Pure HTML, CSS and JS</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border:1px solid var(--sds-color-border-default-default);border-radius:var(--sds-size-radius-200);background:var(--sds-color-background-default-secondary);">
+          <div style="width:36px;height:36px;border-radius:var(--sds-size-radius-200);background:var(--sds-color-background-default-tertiary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><rect x="2" y="2" width="5" height="5" rx="1" stroke="var(--sds-color-icon-default-default)" stroke-width="1.5"/><rect x="11" y="2" width="5" height="5" rx="1" stroke="var(--sds-color-icon-default-default)" stroke-width="1.5"/><rect x="2" y="11" width="5" height="5" rx="1" stroke="var(--sds-color-icon-default-default)" stroke-width="1.5"/><rect x="11" y="11" width="5" height="5" rx="1" stroke="var(--sds-color-icon-default-default)" stroke-width="1.5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--sds-color-text-default-default);">Light & dark mode</div>
+            <div style="font-size:13px;color:var(--sds-color-text-default-secondary);">Built-in theme switching</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <span></span>
+        <div class="form-footer__nav">
+          <button class="btn btn--primary" onclick="goTo(2)">
+            Get started
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Profile -->
+    <div class="step" id="step-2">
+      <div class="step__header">
+        <p class="step__eyebrow">Step 2 of 4</p>
+        <h2 class="step__title">Set up your profile</h2>
+        <p class="step__subtitle">Tell us a bit about yourself so we can personalise your experience.</p>
+      </div>
+
+      <div class="avatar-picker">
+        <div class="avatar-preview" id="avatar-preview">S</div>
+        <div class="avatar-picker__actions">
+          <span class="avatar-picker__label">Profile photo</span>
+          <span class="avatar-picker__hint">This will be shown across the system</span>
+          <button class="avatar-picker__btn">
+            <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M6.5 1.5v10M1.5 6.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Upload photo
+          </button>
+        </div>
+      </div>
+
+      <div class="field__row">
+        <div class="field">
+          <label class="field__label" for="first-name">First name</label>
+          <input class="field__input" id="first-name" type="text" placeholder="Sooraj" autocomplete="given-name" oninput="updateAvatar()" />
+        </div>
+        <div class="field">
+          <label class="field__label" for="last-name">Last name</label>
+          <input class="field__input" id="last-name" type="text" placeholder="S" autocomplete="family-name" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="role">Job title</label>
+        <input class="field__input" id="role" type="text" placeholder="e.g. Product Designer" />
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="email">Work email</label>
+        <input class="field__input" id="email" type="email" placeholder="you@company.com" autocomplete="email" />
+      </div>
+
+      <div class="form-footer">
+        <button class="form-footer__skip" onclick="goTo(1)">← Back</button>
+        <div class="form-footer__nav">
+          <button class="btn btn--ghost" onclick="goTo(3)">Skip</button>
+          <button class="btn btn--primary" onclick="goTo(3)">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Interests -->
+    <div class="step" id="step-3">
+      <div class="step__header">
+        <p class="step__eyebrow">Step 3 of 4</p>
+        <h2 class="step__title">What are you building?</h2>
+        <p class="step__subtitle">Select all that apply — we'll surface the most relevant components for you.</p>
+      </div>
+
+      <div class="tag-grid" id="tag-grid">
+        <button class="sel-tag" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Design systems
+        </button>
+        <button class="sel-tag selected" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Web apps
+        </button>
+        <button class="sel-tag" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Marketing sites
+        </button>
+        <button class="sel-tag selected" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Dashboards
+        </button>
+        <button class="sel-tag" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Mobile apps
+        </button>
+        <button class="sel-tag" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          E-commerce
+        </button>
+        <button class="sel-tag" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          SaaS products
+        </button>
+        <button class="sel-tag" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Prototyping
+        </button>
+        <button class="sel-tag selected" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Internal tools
+        </button>
+        <button class="sel-tag" onclick="toggleTag(this)">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          AI interfaces
+        </button>
+      </div>
+
+      <div class="form-footer">
+        <button class="form-footer__skip" onclick="goTo(2)">← Back</button>
+        <div class="form-footer__nav">
+          <button class="btn btn--ghost" onclick="goTo(4)">Skip</button>
+          <button class="btn btn--primary" onclick="goTo(4)">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Invite team -->
+    <div class="step" id="step-4">
+      <div class="step__header">
+        <p class="step__eyebrow">Step 4 of 4</p>
+        <h2 class="step__title">Invite your team</h2>
+        <p class="step__subtitle">Nucleus works better together. Add teammates to collaborate.</p>
+      </div>
+
+      <div class="invite-input-row">
+        <input class="field__input" id="invite-input" type="email" placeholder="teammate@company.com" />
+        <button class="btn btn--add" onclick="addInvite()">
+          <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add
+        </button>
+      </div>
+
+      <div class="invite-list" id="invite-list">
+        <div class="invite-item">
+          <div class="invite-item__avatar" style="background:#14ae5c;">L</div>
+          <div class="invite-item__info">
+            <div class="invite-item__email">luis@nucleus.design</div>
+            <div class="invite-item__status">Invite sent</div>
+          </div>
+          <button class="invite-item__remove" onclick="removeInvite(this)" aria-label="Remove">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="invite-item">
+          <div class="invite-item__avatar" style="background:#e8b931;">A</div>
+          <div class="invite-item__info">
+            <div class="invite-item__email">ana@nucleus.design</div>
+            <div class="invite-item__status">Invite sent</div>
+          </div>
+          <button class="invite-item__remove" onclick="removeInvite(this)" aria-label="Remove">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button class="form-footer__skip" onclick="goTo(3)">← Back</button>
+        <div class="form-footer__nav">
+          <button class="btn btn--ghost" onclick="goTo(5)">Skip</button>
+          <button class="btn btn--primary" onclick="goTo(5)">
+            Finish setup
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Done -->
+    <div class="step" id="step-5">
+      <div class="success-body">
+        <div class="success-icon">
+          <svg viewBox="0 0 32 32"><path d="M6 16l7 7 13-13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="success-title">You're all set! 🎉</h2>
+        <p class="success-sub">Your Nucleus workspace is ready. Start building with 70+ components and a complete set of design tokens.</p>
+
+        <div class="summary-chips" id="summary-chips">
+          <span class="summary-chip">
+            <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Profile set up
+          </span>
+          <span class="summary-chip">
+            <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Interests saved
+          </span>
+          <span class="summary-chip" id="chip-invites">
+            <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            2 invites sent
+          </span>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+          <a href="index.html" class="btn btn--primary">
+            Browse components
+            <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="tokens.css" target="_blank" class="btn btn--ghost">View tokens.css</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+</div>
+
+<script>
+  var current = 1;
+  var TOTAL = 4;
+
+  var progressMap = { 1: 5, 2: 30, 3: 55, 4: 80, 5: 100 };
+
+  function goTo(n) {
+    document.getElementById('step-' + current).classList.remove('active');
+    current = n;
+    document.getElementById('step-' + current).classList.add('active');
+    document.getElementById('progress').style.width = progressMap[n] + '%';
+    updateStepNav();
+  }
+
+  function updateStepNav() {
+    document.querySelectorAll('.step-item').forEach(function(el) {
+      var s = parseInt(el.dataset.step);
+      el.classList.remove('step-item--active', 'step-item--done');
+      // map: step 1 = nav item 1, steps 2-5 = nav items 2-5 (but welcome is nav 1, done is nav 5)
+      var navStep = s; // nav items 1-5 map to steps 1-5
+      if (navStep === current) el.classList.add('step-item--active');
+      else if (navStep < current) el.classList.add('step-item--done');
+    });
+    // show checkmark for done steps
+    document.querySelectorAll('.step-item--done .step-item__dot').forEach(function(dot, i) {
+      dot.innerHTML = '<svg width="12" height="12" fill="none" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    });
+    document.querySelectorAll('.step-item--active .step-item__dot, .step-item:not(.step-item--done):not(.step-item--active) .step-item__dot').forEach(function(dot) {
+      var s = dot.closest('.step-item').dataset.step;
+      if (!dot.closest('.step-item').classList.contains('step-item--done')) {
+        dot.textContent = s;
+      }
+    });
+  }
+
+  function toggleTag(el) {
+    el.classList.toggle('selected');
+  }
+
+  function updateAvatar() {
+    var name = document.getElementById('first-name').value.trim();
+    var letter = name ? name.charAt(0).toUpperCase() : 'S';
+    document.getElementById('avatar-preview').textContent = letter;
+  }
+
+  var inviteColors = ['#14ae5c','#e8b931','#ec221f','#2c2c2c','#009951','#c00f0c'];
+  var inviteCount = 2;
+
+  function addInvite() {
+    var input = document.getElementById('invite-input');
+    var email = input.value.trim();
+    if (!email || !email.includes('@')) { input.focus(); return; }
+    var letter = email.charAt(0).toUpperCase();
+    var color = inviteColors[inviteCount % inviteColors.length];
+    var item = document.createElement('div');
+    item.className = 'invite-item';
+    item.innerHTML = '<div class="invite-item__avatar" style="background:' + color + '">' + letter + '</div>'
+      + '<div class="invite-item__info"><div class="invite-item__email">' + email + '</div><div class="invite-item__status">Invite sent</div></div>'
+      + '<button class="invite-item__remove" onclick="removeInvite(this)" aria-label="Remove"><svg viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
+    document.getElementById('invite-list').appendChild(item);
+    input.value = '';
+    inviteCount++;
+    updateInviteChip();
+  }
+
+  function removeInvite(btn) {
+    btn.closest('.invite-item').remove();
+    inviteCount = Math.max(0, inviteCount - 1);
+    updateInviteChip();
+  }
+
+  function updateInviteChip() {
+    var chip = document.getElementById('chip-invites');
+    var count = document.querySelectorAll('.invite-item').length;
+    if (chip) chip.childNodes[chip.childNodes.length - 1].textContent = ' ' + count + ' invite' + (count !== 1 ? 's' : '') + ' sent';
+  }
+
+  // Dark mode toggle
+  var root = document.getElementById('root');
+  var themeBtn = document.getElementById('theme-toggle');
+  var themeLabel = document.getElementById('theme-label');
+  var saved = localStorage.getItem('nucleus-theme');
+  if (saved === 'dark') {
+    root.setAttribute('data-theme', 'dark');
+    themeLabel.textContent = 'Light mode';
+  }
+  themeBtn.addEventListener('click', function() {
+    var isDark = root.getAttribute('data-theme') === 'dark';
+    var next = isDark ? '' : 'dark';
+    root.setAttribute('data-theme', next);
+    themeLabel.textContent = next === 'dark' ? 'Light mode' : 'Dark mode';
+    localStorage.setItem('nucleus-theme', next === 'dark' ? 'dark' : 'light');
+  });
+
+  // Enter key on invite input
+  document.getElementById('invite-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') addInvite();
+  });
+</script>
+</body>
+</html>
